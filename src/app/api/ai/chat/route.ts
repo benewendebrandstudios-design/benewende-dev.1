@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+const DEFAULT_MODEL = "meta-llama/llama-3.1-8b-instruct:free";
 
 const SYSTEM_PROMPT = `Tu es un assistant professionnel spécialisé dans la rédaction de CV. Tu aides les utilisateurs francophones à créer des CV percutants et optimisés pour les ATS (Applicant Tracking Systems).
 
@@ -15,6 +17,17 @@ Règles:
 - Quand on te demande d'améliorer une description d'expérience, rends-la plus orientée résultats avec des métriques
 - Utilise des verbes d'action forts
 - Ne dépasse jamais 200 mots par réponse`;
+
+async function getAIModel(): Promise<string> {
+  try {
+    const setting = await prisma.siteSetting.findUnique({ where: { id: "ai" } });
+    if (setting) {
+      const parsed = JSON.parse(setting.value);
+      if (parsed.model) return parsed.model;
+    }
+  } catch { /* fallback */ }
+  return DEFAULT_MODEL;
+}
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -31,6 +44,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const { messages, context } = await request.json();
+    const model = await getAIModel();
 
     const systemMessage = context
       ? `${SYSTEM_PROMPT}\n\nContexte CV actuel:\n${JSON.stringify(context, null, 2)}`
@@ -45,7 +59,7 @@ export async function POST(request: NextRequest) {
         "X-Title": "Benewende CV Generator",
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-8b-instruct:free",
+        model,
         messages: [
           { role: "system", content: systemMessage },
           ...messages.slice(-10),
@@ -67,7 +81,7 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "Désolé, je n'ai pas pu générer de réponse.";
 
-    return NextResponse.json({ content });
+    return NextResponse.json({ content, model });
   } catch (error) {
     console.error("AI chat error:", error);
     return NextResponse.json(

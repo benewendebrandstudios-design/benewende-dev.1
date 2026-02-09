@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import {
   Users, Mail, FileText, TrendingUp, Eye, Trash2, Archive,
   LogOut, ArrowLeft, Shield, FolderOpen, Briefcase, Code2,
-  Clock, Settings, Star,
+  Clock, Settings, Star, Bot, Cpu,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -658,6 +658,82 @@ export default function AdminDashboard() {
                         <Button size="sm" onClick={() => saveSetting("site", siteSettings.site || {})}>
                           Sauvegarder Infos
                         </Button>
+                      </>
+                    );
+                  })()}
+                </CardContent>
+              </Card>
+
+              {/* AI Model settings */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center">
+                      <Bot className="h-4 w-4 text-purple-500" />
+                    </div>
+                    <CardTitle className="text-base">Mod&egrave;le IA (OpenRouter)</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {(() => {
+                    const ai = siteSettings.ai || {};
+                    const models = [
+                      { value: "meta-llama/llama-3.1-8b-instruct:free", label: "Llama 3.1 8B (Gratuit)", provider: "Meta", tag: "free" },
+                      { value: "meta-llama/llama-3.3-70b-instruct", label: "Llama 3.3 70B", provider: "Meta", tag: "quality" },
+                      { value: "google/gemini-2.0-flash-001", label: "Gemini 2.0 Flash", provider: "Google", tag: "fast" },
+                      { value: "google/gemini-2.5-pro-preview", label: "Gemini 2.5 Pro", provider: "Google", tag: "premium" },
+                      { value: "anthropic/claude-3.5-sonnet", label: "Claude 3.5 Sonnet", provider: "Anthropic", tag: "premium" },
+                      { value: "anthropic/claude-3.5-haiku", label: "Claude 3.5 Haiku", provider: "Anthropic", tag: "fast" },
+                      { value: "openai/gpt-4o-mini", label: "GPT-4o Mini", provider: "OpenAI", tag: "fast" },
+                      { value: "openai/gpt-4o", label: "GPT-4o", provider: "OpenAI", tag: "premium" },
+                      { value: "deepseek/deepseek-chat-v3-0324", label: "DeepSeek V3", provider: "DeepSeek", tag: "quality" },
+                      { value: "qwen/qwen-2.5-72b-instruct", label: "Qwen 2.5 72B", provider: "Qwen", tag: "quality" },
+                      { value: "mistralai/mistral-small-3.1-24b-instruct", label: "Mistral Small 3.1", provider: "Mistral", tag: "fast" },
+                    ];
+                    const currentModel = (ai.model as string) || "meta-llama/llama-3.1-8b-instruct:free";
+                    const tagColors: Record<string, string> = {
+                      free: "bg-green-500/10 text-green-600 border-green-500/20",
+                      fast: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+                      quality: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+                      premium: "bg-purple-500/10 text-purple-600 border-purple-500/20",
+                    };
+                    return (
+                      <>
+                        <p className="text-xs text-muted-foreground">
+                          S&eacute;lectionnez le mod&egrave;le utilis&eacute; par l&apos;assistant CV. Les mod&egrave;les premium consomment des cr&eacute;dits OpenRouter.
+                        </p>
+                        <div className="grid gap-2">
+                          {models.map((m) => (
+                            <button
+                              key={m.value}
+                              onClick={() => setSiteSettings((p) => ({ ...p, ai: { ...p.ai, model: m.value } }))}
+                              className={`flex items-center justify-between p-3 rounded-xl border text-left transition-all ${
+                                currentModel === m.value
+                                  ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                                  : "border-border/50 hover:border-primary/20 bg-card"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <Cpu className={`h-4 w-4 shrink-0 ${currentModel === m.value ? "text-primary" : "text-muted-foreground"}`} />
+                                <div>
+                                  <span className="text-sm font-medium">{m.label}</span>
+                                  <span className="text-[10px] text-muted-foreground ml-2">{m.provider}</span>
+                                </div>
+                              </div>
+                              <Badge variant="outline" className={`text-[10px] ${tagColors[m.tag] || ""}`}>
+                                {m.tag === "free" ? "Gratuit" : m.tag === "fast" ? "Rapide" : m.tag === "quality" ? "Qualit\u00e9" : "Premium"}
+                              </Badge>
+                            </button>
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-between pt-2">
+                          <div className="text-xs text-muted-foreground">
+                            Actuel : <code className="text-[10px] bg-muted px-1.5 py-0.5 rounded">{currentModel}</code>
+                          </div>
+                          <Button size="sm" onClick={() => saveSetting("ai", siteSettings.ai || {})}>
+                            Sauvegarder Mod&egrave;le
+                          </Button>
+                        </div>
                       </>
                     );
                   })()}

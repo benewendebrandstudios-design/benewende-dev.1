@@ -50,8 +50,11 @@ export default function Services() {
               >
                 <Card className="h-full group hover:glow-sm transition-all duration-300 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
                   <CardHeader>
-                    <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                      <Icon className="h-6 w-6 text-primary" />
+                    <div className="relative mb-4">
+                      <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent flex items-center justify-center ring-1 ring-primary/10 group-hover:ring-primary/25 group-hover:shadow-lg group-hover:shadow-primary/10 transition-all duration-500">
+                        <Icon className="h-6 w-6 text-primary group-hover:scale-110 transition-transform duration-300" />
+                      </div>
+                      <div className="absolute -inset-1 rounded-2xl bg-primary/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
                     </div>
                     <CardTitle className="text-lg">{service.title}</CardTitle>
                     <p className="text-sm text-muted-foreground">
