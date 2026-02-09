@@ -55,21 +55,21 @@ export const cvTemplates: CVTemplate[] = [
   {
     id: "modern",
     name: "Moderne",
-    description: "Design \u00E9pur\u00E9 avec accents color\u00E9s",
+    description: "Design épuré avec accents colorés",
     isPremium: false,
     previewColor: "from-blue-500 to-cyan-500",
   },
   {
     id: "professional",
     name: "Professionnel",
-    description: "Classique et \u00E9l\u00E9gant pour les entreprises",
+    description: "Classique et élégant pour les entreprises",
     isPremium: false,
     previewColor: "from-gray-700 to-gray-900",
   },
   {
     id: "creative",
-    name: "Cr\u00E9atif",
-    description: "Design audacieux pour les profils cr\u00E9atifs",
+    name: "Créatif",
+    description: "Design audacieux pour les profils créatifs",
     isPremium: true,
     previewColor: "from-purple-500 to-pink-500",
   },
@@ -94,7 +94,7 @@ export const chatSteps = [
   {
     id: "welcome",
     message:
-      "Bonjour ! Je suis votre assistant CV. Je vais vous aider \u00E0 cr\u00E9er un CV professionnel en quelques minutes. Commen\u00E7ons par vos informations personnelles.",
+      "Bonjour ! Je suis votre assistant CV. Je vais vous aider à créer un CV professionnel en quelques minutes. Commençons par vos informations personnelles.",
     field: null,
   },
   {
@@ -107,7 +107,7 @@ export const chatSteps = [
     id: "title",
     message: "Quel est votre titre professionnel ?",
     field: "personalInfo.title",
-    placeholder: "Ex: D\u00E9veloppeur Full Stack",
+    placeholder: "Ex: Développeur Full Stack",
   },
   {
     id: "email",
@@ -117,7 +117,7 @@ export const chatSteps = [
   },
   {
     id: "phone",
-    message: "Votre num\u00E9ro de t\u00E9l\u00E9phone ?",
+    message: "Votre numéro de téléphone ?",
     field: "personalInfo.phone",
     placeholder: "Ex: +226 70 00 00 00",
   },
@@ -130,35 +130,84 @@ export const chatSteps = [
   {
     id: "summary",
     message:
-      "R\u00E9digez un court r\u00E9sum\u00E9 professionnel (3-4 lignes). Je peux vous aider \u00E0 l'am\u00E9liorer avec l'IA ensuite !",
+      "Rédigez un court résumé professionnel (3-4 lignes). Je peux vous aider à l'améliorer avec l'IA ensuite !",
     field: "personalInfo.summary",
-    placeholder: "D\u00E9crivez bri\u00E8vement votre profil et vos objectifs...",
+    placeholder: "Décrivez brièvement votre profil et vos objectifs...",
   },
   {
     id: "experience_ask",
     message:
-      "Avez-vous des exp\u00E9riences professionnelles \u00E0 ajouter ? (oui/non)",
+      "Avez-vous des expériences professionnelles à ajouter ? (oui/non)",
     field: null,
     type: "confirm",
   },
   {
+    id: "experience_title",
+    message:
+      "Ajoutons votre expérience professionnelle. Quel est le titre de votre poste actuel ou dernier poste ?",
+    field: "experiences[0].title",
+    placeholder: "Ex: Développeur Full Stack",
+  },
+  {
+    id: "experience_company",
+    message:
+      "Dans quelle entreprise ?",
+    field: "experiences[0].company",
+    placeholder: "Ex: Tech Solutions SARL",
+  },
+  {
+    id: "experience_period",
+    message:
+      "Période ? (format: date début - date fin, ou 'Présent' si actuel)",
+    field: "experiences[0].startDate",
+    placeholder: "Ex: Jan 2023 - Présent",
+  },
+  {
+    id: "experience_desc",
+    message:
+      "Décrivez brièvement vos responsabilités et réalisations clés (séparées par des virgules).",
+    field: "experiences[0].achievements",
+    placeholder: "Ex: Développement d'APIs REST, Migration cloud AWS, +40% performance",
+  },
+  {
+    id: "education_degree",
+    message:
+      "Passons à votre formation. Quel est votre diplôme le plus récent ?",
+    field: "education[0].degree",
+    placeholder: "Ex: Licence Informatique",
+  },
+  {
+    id: "education_school",
+    message:
+      "Dans quel établissement ?",
+    field: "education[0].school",
+    placeholder: "Ex: Université Joseph Ki-Zerbo",
+  },
+  {
+    id: "education_period",
+    message:
+      "Années de formation ?",
+    field: "education[0].startDate",
+    placeholder: "Ex: 2019 - 2022",
+  },
+  {
     id: "skills",
     message:
-      "Listez vos comp\u00E9tences principales, s\u00E9par\u00E9es par des virgules.",
+      "Listez vos compétences principales, séparées par des virgules.",
     field: "skills",
     placeholder: "Ex: React, Node.js, TypeScript, PostgreSQL, Docker",
   },
   {
     id: "languages",
     message:
-      "Quelles langues parlez-vous ? (format: langue - niveau, s\u00E9par\u00E9es par des virgules)",
+      "Quelles langues parlez-vous ? (format: langue - niveau, séparées par des virgules)",
     field: "languages",
-    placeholder: "Ex: Fran\u00E7ais - Natif, Anglais - Courant, Moor\u00E9 - Natif",
+    placeholder: "Ex: Français - Natif, Anglais - Courant, Mooré - Natif",
   },
   {
     id: "complete",
     message:
-      "Votre CV est pr\u00EAt ! Vous pouvez le pr\u00E9visualiser \u00E0 droite et le t\u00E9l\u00E9charger en PDF. Vous pouvez aussi modifier n'importe quelle section en cliquant dessus.",
+      "Votre CV est prêt ! Vous pouvez le prévisualiser à droite et le télécharger en PDF. Vous pouvez aussi modifier n'importe quelle section en cliquant dessus.",
     field: null,
   },
 ];

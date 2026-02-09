@@ -26,7 +26,7 @@ export async function GET(
 ) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) {
-    return NextResponse.json({ error: "Non autoris\u00E9" }, { status: 403 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
   const model = getModel(params.type);
@@ -45,7 +45,7 @@ export async function POST(
 ) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) {
-    return NextResponse.json({ error: "Non autoris\u00E9" }, { status: 403 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
   const model = getModel(params.type);
@@ -64,7 +64,7 @@ export async function PUT(
 ) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) {
-    return NextResponse.json({ error: "Non autoris\u00E9" }, { status: 403 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
   const model = getModel(params.type);
@@ -84,7 +84,7 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) {
-    return NextResponse.json({ error: "Non autoris\u00E9" }, { status: 403 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
   const model = getModel(params.type);

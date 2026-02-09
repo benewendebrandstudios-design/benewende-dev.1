@@ -1,10 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Block in production unless SEED_SECRET is provided
+  if (process.env.NODE_ENV === "production") {
+    const secret = request.nextUrl.searchParams.get("secret");
+    if (!secret || secret !== process.env.SEED_SECRET) {
+      return NextResponse.json({ error: "Non autoris\u00e9" }, { status: 403 });
+    }
+  }
+
   try {
-    const adminEmail = "admin@benewende.dev";
+    const adminEmail = "benewende.dev@gmail.com";
 
     const existing = await prisma.user.findUnique({
       where: { email: adminEmail },
@@ -17,7 +25,8 @@ export async function GET() {
       });
     }
 
-    const hashedPassword = await bcrypt.hash("admin123", 12);
+    const adminPassword = process.env.ADMIN_PASSWORD || "Benewende@2026!";
+    const hashedPassword = await bcrypt.hash(adminPassword, 12);
 
     const admin = await prisma.user.create({
       data: {
@@ -34,7 +43,7 @@ export async function GET() {
       success: true,
       message: "Admin account created",
       email: admin.email,
-      password_hint: "admin123 - CHANGEZ EN PRODUCTION",
+      password_hint: "Utilisez le mot de passe défini dans ADMIN_PASSWORD ou le mot de passe par défaut",
     });
   } catch (error) {
     console.error("Seed error:", error);

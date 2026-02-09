@@ -37,7 +37,7 @@ export default function CVPreview({ data, template }: CVPreviewProps) {
       animate={{ opacity: 1 }}
       className="h-full overflow-y-auto"
     >
-      <div className="bg-white text-gray-900 shadow-xl mx-auto max-w-[210mm] min-h-[297mm] p-8 md:p-10">
+      <div id="cv-preview-content" className="bg-white text-gray-900 shadow-xl mx-auto max-w-[210mm] min-h-[297mm] p-8 md:p-10">
         {/* Header */}
         <div
           className={`mb-6 pb-6 border-b-2 ${
@@ -147,11 +147,11 @@ export default function CVPreview({ data, template }: CVPreviewProps) {
                       </h3>
                       <p className="text-xs text-gray-500">
                         {exp.company}
-                        {exp.location ? ` \u2022 ${exp.location}` : ""}
+                        {exp.location ? ` • ${exp.location}` : ""}
                       </p>
                     </div>
                     <span className="text-xs text-gray-400 shrink-0 ml-4">
-                      {exp.startDate} - {exp.current ? "Pr\u00E9sent" : exp.endDate}
+                      {exp.startDate} - {exp.current ? "Présent" : exp.endDate}
                     </span>
                   </div>
                   {exp.description && (
@@ -161,7 +161,7 @@ export default function CVPreview({ data, template }: CVPreviewProps) {
                     <ul className="mt-1 space-y-0.5">
                       {exp.achievements.map((a, j) => (
                         <li key={j} className="text-xs text-gray-600 flex items-start gap-1">
-                          <span className="text-gray-400 mt-0.5">\u2022</span>
+                          <span className="text-gray-400 mt-0.5">•</span>
                           {a}
                         </li>
                       ))}
@@ -196,7 +196,7 @@ export default function CVPreview({ data, template }: CVPreviewProps) {
                     </h3>
                     <p className="text-xs text-gray-500">
                       {edu.school}
-                      {edu.location ? ` \u2022 ${edu.location}` : ""}
+                      {edu.location ? ` • ${edu.location}` : ""}
                     </p>
                   </div>
                   <span className="text-xs text-gray-400 shrink-0 ml-4">
@@ -268,7 +268,7 @@ export default function CVPreview({ data, template }: CVPreviewProps) {
               {languages.map((lang, i) => (
                 <span key={i} className="text-xs text-gray-600">
                   <span className="font-medium text-gray-900">{lang.name}</span>{" "}
-                  \u2014 {lang.level}
+                  — {lang.level}
                 </span>
               ))}
             </div>
@@ -294,7 +294,7 @@ export default function CVPreview({ data, template }: CVPreviewProps) {
                 <div key={i} className="flex justify-between text-xs">
                   <span className="text-gray-900 font-medium">{cert.name}</span>
                   <span className="text-gray-400">
-                    {cert.issuer} \u2022 {cert.date}
+                    {cert.issuer} • {cert.date}
                   </span>
                 </div>
               ))}

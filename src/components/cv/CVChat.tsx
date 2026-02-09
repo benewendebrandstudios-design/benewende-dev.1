@@ -60,6 +60,7 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
 
     const newData = { ...cvData };
 
+    // Personal info fields
     if (step.field === "personalInfo.fullName") {
       newData.personalInfo = { ...newData.personalInfo, fullName: value };
     } else if (step.field === "personalInfo.title") {
@@ -72,33 +73,57 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
       newData.personalInfo = { ...newData.personalInfo, location: value };
     } else if (step.field === "personalInfo.summary") {
       newData.personalInfo = { ...newData.personalInfo, summary: value };
-    } else if (step.field === "skills") {
+    }
+    // Experience fields
+    else if (step.field === "experiences[0].title") {
+      const exp = newData.experiences[0] || { title: "", company: "", location: "", startDate: "", endDate: "", current: false, description: "", achievements: [] };
+      exp.title = value;
+      newData.experiences = [exp];
+    } else if (step.field === "experiences[0].company") {
+      const exp = newData.experiences[0] || { title: "", company: "", location: "", startDate: "", endDate: "", current: false, description: "", achievements: [] };
+      exp.company = value;
+      newData.experiences = [exp];
+    } else if (step.field === "experiences[0].startDate") {
+      const exp = newData.experiences[0] || { title: "", company: "", location: "", startDate: "", endDate: "", current: false, description: "", achievements: [] };
+      const parts = value.split("-").map((s) => s.trim());
+      exp.startDate = parts[0] || value;
+      exp.endDate = parts[1] || "Pr\u00e9sent";
+      exp.current = (parts[1] || "").toLowerCase().includes("pr\u00e9sent") || (parts[1] || "").toLowerCase().includes("present") || !parts[1];
+      newData.experiences = [exp];
+    } else if (step.field === "experiences[0].achievements") {
+      const exp = newData.experiences[0] || { title: "", company: "", location: "", startDate: "", endDate: "", current: false, description: "", achievements: [] };
+      exp.achievements = value.split(",").map((s) => s.trim()).filter(Boolean);
+      exp.description = exp.achievements[0] || "";
+      newData.experiences = [exp];
+    }
+    // Education fields
+    else if (step.field === "education[0].degree") {
+      const edu = newData.education[0] || { degree: "", school: "", location: "", startDate: "", endDate: "" };
+      edu.degree = value;
+      newData.education = [edu];
+    } else if (step.field === "education[0].school") {
+      const edu = newData.education[0] || { degree: "", school: "", location: "", startDate: "", endDate: "" };
+      edu.school = value;
+      newData.education = [edu];
+    } else if (step.field === "education[0].startDate") {
+      const edu = newData.education[0] || { degree: "", school: "", location: "", startDate: "", endDate: "" };
+      const parts = value.split("-").map((s) => s.trim());
+      edu.startDate = parts[0] || value;
+      edu.endDate = parts[1] || parts[0] || value;
+      newData.education = [edu];
+    }
+    // Skills
+    else if (step.field === "skills") {
       const skillItems = value.split(",").map((s) => s.trim()).filter(Boolean);
-      newData.skills = [{ category: "Comp\u00E9tences", items: skillItems }];
-    } else if (step.field === "languages") {
+      newData.skills = [{ category: "Comp\u00e9tences", items: skillItems }];
+    }
+    // Languages
+    else if (step.field === "languages") {
       const langs = value.split(",").map((l) => {
         const parts = l.trim().split("-").map((p) => p.trim());
         return { name: parts[0] || "", level: parts[1] || "Courant" };
       });
       newData.languages = langs;
-    }
-
-    if (step.id === "experience_ask") {
-      const isYes = value.toLowerCase().startsWith("o");
-      if (isYes) {
-        newData.experiences = [
-          {
-            title: "Titre du poste",
-            company: "Nom de l'entreprise",
-            location: "Ville, Pays",
-            startDate: "2022",
-            endDate: "Pr\u00E9sent",
-            current: true,
-            description: "Description du poste",
-            achievements: ["R\u00E9alisation cl\u00E9"],
-          },
-        ];
-      }
     }
 
     onUpdateCV(newData);
@@ -118,7 +143,16 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
     setIsTyping(true);
 
     setTimeout(() => {
-      const nextStepIndex = currentStep + 1;
+      let nextStepIndex = currentStep + 1;
+
+      // Skip experience steps if user said no
+      const step = chatSteps[currentStep];
+      if (step?.id === "experience_ask" && inputValue.toLowerCase().startsWith("n")) {
+        // Skip to education steps (find education_degree)
+        const eduIdx = chatSteps.findIndex((s) => s.id === "education_degree");
+        if (eduIdx > 0) nextStepIndex = eduIdx;
+      }
+
       if (nextStepIndex < chatSteps.length) {
         const nextStep = chatSteps[nextStepIndex];
         setMessages((prev) => [
@@ -145,9 +179,9 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
     setIsAILoading(true);
     try {
       const prompt = step.field === "personalInfo.summary"
-        ? `Am\u00e9liore ce r\u00e9sum\u00e9 professionnel pour un CV. Le candidat s'appelle ${cvData.personalInfo.fullName || "le candidat"}, il est ${cvData.personalInfo.title || "professionnel"}. G\u00e9n\u00e8re un r\u00e9sum\u00e9 de 3-4 phrases percutantes.`
+        ? `Améliore ce résumé professionnel pour un CV. Le candidat s'appelle ${cvData.personalInfo.fullName || "le candidat"}, il est ${cvData.personalInfo.title || "professionnel"}. Génère un résumé de 3-4 phrases percutantes.`
         : step.field === "skills"
-        ? `Sugg\u00e8re une liste de comp\u00e9tences cl\u00e9s pour un ${cvData.personalInfo.title || "professionnel"}. Donne juste les noms s\u00e9par\u00e9s par des virgules, 8-12 comp\u00e9tences.`
+        ? `Suggère une liste de compétences clés pour un ${cvData.personalInfo.title || "professionnel"}. Donne juste les noms séparés par des virgules, 8-12 compétences.`
         : `Aide-moi pour la question: "${step.message}". Contexte: ${cvData.personalInfo.title || "professionnel"}.`;
 
       const res = await fetch("/api/ai/chat", {
@@ -166,7 +200,7 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
           {
             id: `ai-${Date.now()}`,
             role: "assistant",
-            content: `\u2728 **Suggestion IA:** ${content}\n\nVous pouvez copier cette suggestion ou la modifier selon vos besoins.`,
+            content: `✨ **Suggestion IA:** ${content}\n\nVous pouvez copier cette suggestion ou la modifier selon vos besoins.`,
             isAI: true,
           },
         ]);
@@ -177,7 +211,7 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
           {
             id: `ai-err-${Date.now()}`,
             role: "assistant",
-            content: "D\u00e9sol\u00e9, le service IA n'est pas disponible pour le moment. Vous pouvez continuer manuellement.",
+            content: "Désolé, le service IA n'est pas disponible pour le moment. Vous pouvez continuer manuellement.",
             isAI: true,
           },
         ]);
@@ -205,7 +239,7 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
   };
 
   const currentStepData = chatSteps[currentStep];
-  const canUseAI = currentStepData?.field === "personalInfo.summary" || currentStepData?.field === "skills";
+  const canUseAI = currentStepData?.field === "personalInfo.summary" || currentStepData?.field === "skills" || currentStepData?.field === "experiences[0].achievements";
 
   return (
     <div className="flex flex-col h-full">
@@ -217,7 +251,7 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
           <div>
             <h3 className="text-sm font-bold">Assistant CV</h3>
             <p className="text-[11px] text-muted-foreground">
-              Propuls\u00e9 par IA
+              Propulsé par IA
             </p>
           </div>
         </div>
@@ -312,7 +346,7 @@ export default function CVChat({ cvData, onUpdateCV, onComplete, onStepChange }:
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={currentStepData?.placeholder || "Tapez votre r\u00E9ponse..."}
+            placeholder={currentStepData?.placeholder || "Tapez votre réponse..."}
             disabled={currentStepData?.id === "complete"}
             className="flex-1 rounded-xl border-border/50 focus-visible:ring-primary/30"
           />

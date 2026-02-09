@@ -14,9 +14,9 @@ import { ExtendedUser } from "@/lib/types";
 const navLinks = [
   { href: "#services", label: "Services" },
   { href: "#projets", label: "Projets" },
-  { href: "#competences", label: "Comp\u00E9tences" },
+  { href: "#competences", label: "Compétences" },
   { href: "#process", label: "Process" },
-  { href: "#temoignages", label: "T\u00E9moignages" },
+  { href: "#temoignages", label: "Témoignages" },
   { href: "#contact", label: "Contact" },
 ];
 

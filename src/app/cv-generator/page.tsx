@@ -15,6 +15,7 @@ import {
   Zap,
   Shield,
   Palette,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -40,19 +41,31 @@ export default function CVGeneratorPage() {
 
   const priceLabels: Record<string, string> = {
     XOF: "3 000 FCFA",
-    EUR: "5\u20AC",
+    EUR: "5€",
     USD: "$5",
   };
   const businessLabels: Record<string, string> = {
     XOF: "30 000 FCFA",
-    EUR: "50\u20AC",
+    EUR: "50€",
     USD: "$50",
   };
 
-  const handleDownloadPDF = () => {
-    alert(
-      "La g\u00E9n\u00E9ration PDF sera disponible prochainement. Pour l'instant, utilisez Ctrl+P (Cmd+P) pour imprimer en PDF."
-    );
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setIsPdfLoading(true);
+    try {
+      const { generateCVPdf } = await import("@/lib/generatePDF");
+      const fileName = cvData.personalInfo.fullName
+        ? `CV-${cvData.personalInfo.fullName.replace(/\s+/g, "_")}`
+        : "CV-Benewende";
+      await generateCVPdf("cv-preview-content", fileName);
+    } catch (err) {
+      console.error("PDF generation error:", err);
+      alert("Erreur lors de la génération du PDF. Utilisez Ctrl+P (Cmd+P) comme alternative.");
+    } finally {
+      setIsPdfLoading(false);
+    }
   };
 
   return (
@@ -131,9 +144,10 @@ export default function CVGeneratorPage() {
                       size="sm"
                       className="gap-1.5 rounded-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                       onClick={handleDownloadPDF}
+                      disabled={isPdfLoading}
                     >
-                      <Download className="h-3.5 w-3.5" />
-                      <span className="hidden sm:inline">T&eacute;l&eacute;charger</span> PDF
+                      {isPdfLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                      <span className="hidden sm:inline">{isPdfLoading ? "G\u00e9n\u00e9ration..." : "T\u00e9l\u00e9charger"}</span> {!isPdfLoading && "PDF"}
                     </Button>
                   </motion.div>
                 )}
@@ -305,7 +319,7 @@ export default function CVGeneratorPage() {
                   {
                     name: "Business",
                     price: `${businessLabels[currency]}/mois`,
-                    desc: "Illimit\u00e9",
+                    desc: "Illimité",
                     icon: Shield,
                     active: false,
                   },

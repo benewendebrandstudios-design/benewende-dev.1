@@ -17,14 +17,15 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://benewende.dev"),
   title: {
-    default: "Benewende.dev | D\u00E9veloppeur Full Stack & Cr\u00E9ateur de SaaS",
+    default: "Benewende.dev | Développeur Full Stack & Créateur de SaaS",
     template: "%s | Benewende.dev",
   },
   description:
-    "D\u00E9veloppeur Full Stack expert en React, Next.js et architectures SaaS. Cr\u00E9ation d'applications web performantes et solutions IA. Bas\u00E9 \u00E0 Ouagadougou, Burkina Faso.",
+    "Développeur Full Stack expert en React, Next.js et architectures SaaS. Création d'applications web performantes et solutions IA. Basé à Ouagadougou, Burkina Faso.",
   keywords: [
-    "d\u00E9veloppeur full stack",
+    "développeur full stack",
     "SaaS",
     "Next.js",
     "React",
@@ -42,15 +43,15 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://benewende.dev",
     siteName: "Benewende.dev",
-    title: "Benewende.dev | D\u00E9veloppeur Full Stack & Cr\u00E9ateur de SaaS",
+    title: "Benewende.dev | Développeur Full Stack & Créateur de SaaS",
     description:
-      "Je transforme vos id\u00E9es en produits digitaux performants. Expert React/Next.js, Node.js et architectures cloud.",
+      "Je transforme vos idées en produits digitaux performants. Expert React/Next.js, Node.js et architectures cloud.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Benewende.dev | D\u00E9veloppeur Full Stack & Cr\u00E9ateur de SaaS",
+    title: "Benewende.dev | Développeur Full Stack & Créateur de SaaS",
     description:
-      "Je transforme vos id\u00E9es en produits digitaux performants.",
+      "Je transforme vos idées en produits digitaux performants.",
   },
   robots: {
     index: true,

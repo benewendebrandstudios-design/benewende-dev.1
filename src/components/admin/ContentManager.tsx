@@ -154,11 +154,11 @@ export default function ContentManager({
               const lines = e.target.value.split("\n");
               setData({ ...data, [field.key]: JSON.stringify(lines.filter(Boolean)) });
             }}
-            placeholder="Un \u00e9l\u00e9ment par ligne"
+            placeholder="Un élément par ligne"
             rows={4}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono resize-y min-h-[80px]"
           />
-          <p className="text-[10px] text-muted-foreground mt-0.5">Un \u00e9l\u00e9ment par ligne</p>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Un élément par ligne</p>
         </div>
       );
     }
@@ -183,7 +183,7 @@ export default function ContentManager({
                     updated[i] = { ...updated[i], name: e.target.value };
                     setData({ ...data, [field.key]: JSON.stringify(updated) });
                   }}
-                  placeholder="Comp\u00e9tence"
+                  placeholder="Compétence"
                   className="flex-1 h-8 text-xs"
                 />
                 <Input
@@ -208,9 +208,9 @@ export default function ContentManager({
                   className="h-8 rounded-md border border-input bg-background px-2 text-xs"
                 >
                   <option value="Expert">Expert</option>
-                  <option value="Avanc\u00e9">Avanc\u00e9</option>
-                  <option value="Interm\u00e9diaire">Interm\u00e9diaire</option>
-                  <option value="D\u00e9butant">D\u00e9butant</option>
+                  <option value="Avancé">Avancé</option>
+                  <option value="Intermédiaire">Intermédiaire</option>
+                  <option value="Débutant">Débutant</option>
                 </select>
                 <Button
                   variant="ghost"
@@ -230,7 +230,7 @@ export default function ContentManager({
               size="sm"
               className="text-xs"
               onClick={() => {
-                const updated = [...skills, { name: "", level: 80, label: "Avanc\u00e9" }];
+                const updated = [...skills, { name: "", level: 80, label: "Avancé" }];
                 setData({ ...data, [field.key]: JSON.stringify(updated) });
               }}
             >
@@ -309,7 +309,7 @@ export default function ContentManager({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-base font-semibold">{title}</h2>
-          <p className="text-xs text-muted-foreground">{items.length} \u00e9l\u00e9ment(s)</p>
+          <p className="text-xs text-muted-foreground">{items.length} élément(s)</p>
         </div>
         <Button size="sm" className="gap-1.5" onClick={startCreate}>
           <Plus className="h-3.5 w-3.5" /> Ajouter
@@ -318,7 +318,7 @@ export default function ContentManager({
 
       <AnimatePresence>
         {isCreating &&
-          renderForm(newData, setNewData, handleCreate, () => setIsCreating(false), "Cr\u00e9er")}
+          renderForm(newData, setNewData, handleCreate, () => setIsCreating(false), "Créer")}
       </AnimatePresence>
 
       <div className="space-y-2 mt-3">
@@ -347,7 +347,7 @@ export default function ContentManager({
                     )}
                     {item.visible === false && (
                       <Badge variant="secondary" className="text-[10px] gap-0.5">
-                        <EyeOff className="h-2.5 w-2.5" /> Masqu\u00e9
+                        <EyeOff className="h-2.5 w-2.5" /> Masqué
                       </Badge>
                     )}
                   </div>
@@ -382,7 +382,7 @@ export default function ContentManager({
 
       {items.length === 0 && !isCreating && (
         <div className="text-center py-8 text-sm text-muted-foreground">
-          Aucun \u00e9l\u00e9ment. Cliquez sur &quot;Ajouter&quot; pour commencer.
+          Aucun élément. Cliquez sur &quot;Ajouter&quot; pour commencer.
         </div>
       )}
     </div>

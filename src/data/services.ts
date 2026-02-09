@@ -21,7 +21,7 @@ export interface Service {
 
 export const currencySymbols: Record<Currency, string> = {
   XOF: "FCFA",
-  EUR: "\u20AC",
+  EUR: "€",
   USD: "$",
 };
 
@@ -35,19 +35,19 @@ export const services: Service[] = [
   {
     id: "saas-dev",
     icon: Rocket,
-    title: "D\u00E9veloppement SaaS",
+    title: "Développement SaaS",
     description:
-      "Cr\u00E9ation de plateformes SaaS compl\u00E8tes, de l'id\u00E9e au d\u00E9ploiement.",
+      "Création de plateformes SaaS complètes, de l'idée au déploiement.",
     price: {
       XOF: "1 500 000 FCFA",
-      EUR: "2 500\u20AC",
+      EUR: "2 500€",
       USD: "$2,700",
     },
     features: [
       "Architecture scalable",
       "Design UI/UX premium",
-      "Int\u00E9gration paiements",
-      "D\u00E9ploiement & formation",
+      "Intégration paiements",
+      "Déploiement & formation",
       "Support 3 mois inclus",
     ],
   },
@@ -59,14 +59,14 @@ export const services: Service[] = [
       "Sites web et applications sur mesure, modernes et performants.",
     price: {
       XOF: "600 000 FCFA",
-      EUR: "1 000\u20AC",
+      EUR: "1 000€",
       USD: "$1,100",
     },
     features: [
       "Design responsive",
-      "SEO optimis\u00E9",
+      "SEO optimisé",
       "Animations fluides",
-      "CMS int\u00E9gr\u00E9",
+      "CMS intégré",
       "Livraison 2-4 semaines",
     ],
   },
@@ -75,7 +75,7 @@ export const services: Service[] = [
     icon: Bot,
     title: "Solutions IA",
     description:
-      "Int\u00E9grations IA & automatisation pour booster votre productivit\u00E9.",
+      "Intégrations IA & automatisation pour booster votre productivité.",
     price: {
       XOF: "Sur devis",
       EUR: "Sur devis",
@@ -84,38 +84,38 @@ export const services: Service[] = [
     features: [
       "Chatbots intelligents",
       "Automatisation workflows",
-      "Analyse de donn\u00E9es",
+      "Analyse de données",
       "API IA sur mesure",
-      "Formation \u00E9quipe",
+      "Formation équipe",
     ],
   },
   {
     id: "cv-generator",
     icon: FileText,
-    title: "G\u00E9n\u00E9rateur CV Pro",
+    title: "Générateur CV Pro",
     description:
-      "CV IA personnalis\u00E9 en 5 minutes avec templates premium.",
+      "CV IA personnalisé en 5 minutes avec templates premium.",
     price: {
       XOF: "3 000 FCFA/CV",
-      EUR: "5\u20AC/CV",
+      EUR: "5€/CV",
       USD: "$5/CV",
     },
     features: [
       "Templates professionnels",
       "Optimisation ATS",
       "Suggestions IA",
-      "Export PDF haute qualit\u00E9",
+      "Export PDF haute qualité",
       "Multilingue FR/EN",
     ],
     pricingTiers: [
       {
         name: "Gratuit",
-        prices: { XOF: "0 FCFA", EUR: "0\u20AC", USD: "$0" },
+        prices: { XOF: "0 FCFA", EUR: "0€", USD: "$0" },
         features: ["1 CV basique", "1 template", "Export PDF"],
       },
       {
         name: "Pro",
-        prices: { XOF: "3 000 FCFA", EUR: "5\u20AC", USD: "$5" },
+        prices: { XOF: "3 000 FCFA", EUR: "5€", USD: "$5" },
         features: [
           "Templates premium",
           "Optimisation ATS",
@@ -126,12 +126,12 @@ export const services: Service[] = [
       },
       {
         name: "Business",
-        prices: { XOF: "30 000 FCFA/mois", EUR: "50\u20AC/mois", USD: "$50/mois" },
+        prices: { XOF: "30 000 FCFA/mois", EUR: "50€/mois", USD: "$50/mois" },
         features: [
-          "CVs illimit\u00E9s",
+          "CVs illimités",
           "Tous les templates",
           "Support prioritaire",
-          "API acc\u00E8s",
+          "API accès",
         ],
       },
     ],
@@ -141,15 +141,15 @@ export const services: Service[] = [
     icon: GraduationCap,
     title: "Formation & Mentorat",
     description:
-      "Accompagnement tech personnalis\u00E9 pour juniors et seniors.",
+      "Accompagnement tech personnalisé pour juniors et seniors.",
     price: {
       XOF: "25 000 FCFA/h",
-      EUR: "40\u20AC/h",
+      EUR: "40€/h",
       USD: "$45/h",
     },
     features: [
       "Sessions 1-on-1",
-      "Plan personnalis\u00E9",
+      "Plan personnalisé",
       "Projets pratiques",
       "Code review",
       "Suivi progression",
@@ -160,10 +160,10 @@ export const services: Service[] = [
     icon: Lightbulb,
     title: "Consulting Tech",
     description:
-      "Audit technique, conseils architecture et strat\u00E9gie digitale.",
+      "Audit technique, conseils architecture et stratégie digitale.",
     price: {
       XOF: "150 000 FCFA",
-      EUR: "250\u20AC",
+      EUR: "250€",
       USD: "$270",
     },
     features: [
@@ -171,7 +171,7 @@ export const services: Service[] = [
       "Recommandations",
       "Roadmap technique",
       "Benchmark concurrence",
-      "Rapport d\u00E9taill\u00E9",
+      "Rapport détaillé",
     ],
   },
 ];

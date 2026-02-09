@@ -31,8 +31,6 @@ export const projects: Project[] = [
     technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Tailwind"],
     status: "live",
     category: "saas",
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/benewende",
     stats: { users: "500+", performance: "99.9%", roi: "3x" },
   },
   {
@@ -44,8 +42,6 @@ export const projects: Project[] = [
     technologies: ["React", "Node.js", "OpenAI", "MongoDB", "Redis"],
     status: "live",
     category: "ia",
-    liveUrl: "https://example.com",
-    githubUrl: "https://github.com/benewende",
     stats: { users: "1.2K", performance: "98%", roi: "5x" },
   },
   {
@@ -57,7 +53,6 @@ export const projects: Project[] = [
     technologies: ["Next.js", "Prisma", "Stripe", "AWS S3", "Tailwind"],
     status: "live",
     category: "webapp",
-    liveUrl: "https://example.com",
     stats: { users: "2K+", performance: "97%", roi: "4x" },
   },
   {
@@ -71,7 +66,6 @@ export const projects: Project[] = [
     category: "saas",
     progress: 75,
     launchDate: "Q2 2026",
-    githubUrl: "https://github.com/benewende",
   },
   {
     id: "mobile-fintech",
@@ -96,7 +90,6 @@ export const projects: Project[] = [
     category: "ia",
     progress: 90,
     launchDate: "Q1 2026",
-    githubUrl: "https://github.com/benewende",
   },
   {
     id: "chatbot-builder",
@@ -107,7 +100,6 @@ export const projects: Project[] = [
     technologies: ["Next.js", "LangChain", "Pinecone", "OpenAI"],
     status: "prototype",
     category: "ia",
-    githubUrl: "https://github.com/benewende",
   },
   {
     id: "devops-monitor",
@@ -118,6 +110,5 @@ export const projects: Project[] = [
     technologies: ["Go", "Docker", "Prometheus", "Grafana", "WebSocket"],
     status: "prototype",
     category: "prototype",
-    githubUrl: "https://github.com/benewende",
   },
 ];

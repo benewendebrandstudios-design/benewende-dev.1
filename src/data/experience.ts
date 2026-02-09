@@ -9,13 +9,13 @@ export interface Experience {
 
 export const experiences: Experience[] = [
   {
-    period: "2024 - Pr\u00E9sent",
-    title: "Cr\u00E9ateur de SaaS & Freelance",
+    period: "2024 - Présent",
+    title: "Créateur de SaaS & Freelance",
     company: "Benewende.dev",
     description:
-      "D\u00E9veloppement de produits SaaS et accompagnement clients sur des projets web ambitieux.",
+      "Développement de produits SaaS et accompagnement clients sur des projets web ambitieux.",
     achievements: [
-      "D\u00E9veloppement de 5+ SaaS en production",
+      "Développement de 5+ SaaS en production",
       "Accompagnement de 20+ clients",
       "95% de satisfaction client",
     ],
@@ -23,26 +23,26 @@ export const experiences: Experience[] = [
   },
   {
     period: "2022 - 2024",
-    title: "D\u00E9veloppeur Full Stack Senior",
+    title: "Développeur Full Stack Senior",
     company: "Tech Company",
     description:
-      "Lead technique sur des projets d'envergure avec une \u00E9quipe de d\u00E9veloppeurs.",
+      "Lead technique sur des projets d'envergure avec une équipe de développeurs.",
     achievements: [
-      "Architecture de plateformes \u00E0 fort trafic",
-      "Lead technique \u00E9quipe de 4 d\u00E9veloppeurs",
-      "R\u00E9duction temps de chargement de 60%",
+      "Architecture de plateformes à fort trafic",
+      "Lead technique équipe de 4 développeurs",
+      "Réduction temps de chargement de 60%",
     ],
   },
   {
     period: "2020 - 2022",
-    title: "D\u00E9veloppeur Full Stack",
+    title: "Développeur Full Stack",
     company: "Digital Agency",
     description:
-      "D\u00E9veloppement d'applications web et mobiles pour divers clients B2B.",
+      "Développement d'applications web et mobiles pour divers clients B2B.",
     achievements: [
       "Stack React / Node.js",
-      "15+ projets livr\u00E9s",
-      "D\u00E9veloppement de features cl\u00E9s",
+      "15+ projets livrés",
+      "Développement de features clés",
     ],
   },
 ];

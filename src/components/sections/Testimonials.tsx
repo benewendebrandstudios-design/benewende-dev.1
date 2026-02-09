@@ -18,6 +18,8 @@ export default function Testimonials() {
       (prev) => (prev - 1 + testimonials.length) % testimonials.length
     );
 
+  if (!testimonials.length) return null;
+
   return (
     <section id="temoignages" className="py-24 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.02] to-transparent" />

@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json();
+    const { token, password } = await request.json();
 
-    if (!name || !email || !password) {
+    if (!token || !password) {
       return NextResponse.json(
-        { error: "Nom, email et mot de passe requis" },
+        { error: "Token et mot de passe requis" },
         { status: 400 }
       );
     }
@@ -20,35 +20,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) {
+    const user = await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetExpires: { gt: new Date() },
+      },
+    });
+
+    if (!user) {
       return NextResponse.json(
-        { error: "Un compte existe déjà avec cet email" },
-        { status: 409 }
+        { error: "Lien invalide ou expiré. Demandez un nouveau lien." },
+        { status: 400 }
       );
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = await prisma.user.create({
+    await prisma.user.update({
+      where: { id: user.id },
       data: {
-        name,
-        email,
         password: hashedPassword,
-        role: "user",
-        plan: "free",
-        cvCredits: 1,
+        resetToken: null,
+        resetExpires: null,
       },
     });
 
     return NextResponse.json({
       success: true,
-      user: { id: user.id, name: user.name, email: user.email },
+      message: "Mot de passe mis à jour avec succès.",
     });
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("Reset password error:", error);
     return NextResponse.json(
-      { error: "Erreur lors de l'inscription" },
+      { error: "Une erreur est survenue" },
       { status: 500 }
     );
   }

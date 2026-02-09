@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 const steps = [
   {
     icon: Search,
-    title: "D\u00E9couverte",
+    title: "Découverte",
     duration: "1-2 jours",
     tasks: ["Analyse besoin", "Audit technique", "Proposition solution"],
   },
@@ -26,15 +26,15 @@ const steps = [
   },
   {
     icon: Code2,
-    title: "D\u00E9veloppement",
+    title: "Développement",
     duration: "2-6 semaines",
-    tasks: ["Sprints hebdomadaires", "D\u00E9mos r\u00E9guli\u00E8res", "Feedbacks it\u00E9ratifs"],
+    tasks: ["Sprints hebdomadaires", "Démos régulières", "Feedbacks itératifs"],
   },
   {
     icon: Rocket,
-    title: "D\u00E9ploiement",
+    title: "Déploiement",
     duration: "1 semaine",
-    tasks: ["Mise en production", "Formation \u00E9quipe", "Documentation"],
+    tasks: ["Mise en production", "Formation équipe", "Documentation"],
   },
   {
     icon: Wrench,
@@ -55,14 +55,14 @@ export default function Process() {
           className="text-center mb-16"
         >
           <Badge variant="outline" className="mb-4">
-            M\u00E9thodologie
+            Méthodologie
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Comment je{" "}
             <span className="gradient-text">travaille</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Un process \u00E9prouv\u00E9 pour livrer des projets de qualit\u00E9, dans les
+            Un process éprouvé pour livrer des projets de qualité, dans les
             temps et le budget.
           </p>
         </motion.div>
@@ -101,7 +101,7 @@ export default function Process() {
                       </div>
                       <div>
                         <div className="text-xs text-muted-foreground uppercase tracking-wider">
-                          \u00C9tape {i + 1}
+                          Étape {i + 1}
                         </div>
                         <h3 className="text-lg font-semibold">{step.title}</h3>
                       </div>

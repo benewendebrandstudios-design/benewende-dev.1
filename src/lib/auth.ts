@@ -1,5 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
@@ -21,7 +23,11 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error("Aucun compte trouv\u00E9 avec cet email");
+          throw new Error("Aucun compte trouvé avec cet email");
+        }
+
+        if (!user.password) {
+          throw new Error("Ce compte utilise la connexion Google/GitHub. Utilisez le bouton correspondant.");
         }
 
         const isValid = await bcrypt.compare(
@@ -39,19 +45,78 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           role: user.role,
           plan: user.plan,
+          image: user.image,
         };
       },
     }),
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          }),
+        ]
+      : []),
+    ...(process.env.GITHUB_ID && process.env.GITHUB_SECRET
+      ? [
+          GitHubProvider({
+            clientId: process.env.GITHUB_ID,
+            clientSecret: process.env.GITHUB_SECRET,
+          }),
+        ]
+      : []),
   ],
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async signIn({ user, account }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        const email = user.email;
+        if (!email) return false;
+
+        let dbUser = await prisma.user.findUnique({ where: { email } });
+
+        if (!dbUser) {
+          dbUser = await prisma.user.create({
+            data: {
+              name: user.name || email.split("@")[0],
+              email,
+              image: user.image,
+              provider: account.provider,
+              providerId: account.providerAccountId,
+              role: "user",
+              plan: "free",
+              cvCredits: 1,
+            },
+          });
+        } else if (!dbUser.provider) {
+          await prisma.user.update({
+            where: { email },
+            data: {
+              provider: account.provider,
+              providerId: account.providerAccountId,
+              image: dbUser.image || user.image,
+            },
+          });
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, account }) {
       if (user) {
-        token.role = (user as unknown as Record<string, unknown>).role;
-        token.plan = (user as unknown as Record<string, unknown>).plan;
-        token.id = user.id;
+        if (account?.provider === "google" || account?.provider === "github") {
+          const dbUser = await prisma.user.findUnique({ where: { email: user.email! } });
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.plan = dbUser.plan;
+            token.id = dbUser.id;
+          }
+        } else {
+          token.role = (user as unknown as Record<string, unknown>).role;
+          token.plan = (user as unknown as Record<string, unknown>).plan;
+          token.id = user.id;
+        }
       }
       return token;
     },
@@ -66,6 +131,35 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/auth/login",
+  },
+  cookies: {
+    pkceCodeVerifier: {
+      name: "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    state: {
+      name: "next-auth.state",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    callbackUrl: {
+      name: "next-auth.callback-url",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

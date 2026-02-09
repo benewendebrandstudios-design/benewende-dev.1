@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       // Notification to admin
       await resend.emails.send({
         from: "Benewende.dev <noreply@benewende.dev>",
-        to: ["contact@benewende.dev"],
+        to: ["benewende.dev@gmail.com"],
         subject: `Nouveau message de ${name}${project ? ` - ${project}` : ""}`,
         html: `
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
@@ -64,20 +64,20 @@ export async function POST(request: NextRequest) {
           <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
             <div style="background: linear-gradient(135deg, #0066FF, #0052cc); padding: 32px 24px; border-radius: 12px 12px 0 0; color: white; text-align: center;">
               <h1 style="margin: 0; font-size: 22px;">Merci ${name} !</h1>
-              <p style="margin: 8px 0 0; opacity: 0.9; font-size: 14px;">Votre message a bien \u00e9t\u00e9 re\u00e7u</p>
+              <p style="margin: 8px 0 0; opacity: 0.9; font-size: 14px;">Votre message a bien été reçu</p>
             </div>
             <div style="background: #f9fafb; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
               <p style="font-size: 14px; line-height: 1.7; color: #374151;">
                 Bonjour <strong>${name}</strong>,
               </p>
               <p style="font-size: 14px; line-height: 1.7; color: #374151;">
-                Je vous confirme la bonne r\u00e9ception de votre message. Je reviendrai vers vous dans les <strong>24 heures</strong>.
+                Je vous confirme la bonne réception de votre message. Je reviendrai vers vous dans les <strong>24 heures</strong>.
               </p>
-              ${project ? `<p style="font-size: 14px; line-height: 1.7; color: #374151;">Votre projet <strong>${project}</strong> m'int\u00e9resse et j'ai h\u00e2te d'en discuter avec vous.</p>` : ""}
+              ${project ? `<p style="font-size: 14px; line-height: 1.7; color: #374151;">Votre projet <strong>${project}</strong> m'intéresse et j'ai hâte d'en discuter avec vous.</p>` : ""}
               <p style="font-size: 14px; line-height: 1.7; color: #374151;">
-                \u00C0 tr\u00e8s bient\u00f4t,<br/>
+                À très bientôt,<br/>
                 <strong>Benewende</strong><br/>
-                <span style="color: #6b7280;">D\u00e9veloppeur Full Stack</span>
+                <span style="color: #6b7280;">Développeur Full Stack</span>
               </p>
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
               <p style="font-size: 12px; color: #9ca3af; text-align: center;">
@@ -90,12 +90,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Message envoy\u00E9 avec succ\u00E8s. R\u00E9ponse sous 24h.",
+      message: "Message envoyé avec succès. Réponse sous 24h.",
     });
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(
-      { error: "Une erreur est survenue. Veuillez r\u00E9essayer." },
+      { error: "Une erreur est survenue. Veuillez réessayer." },
       { status: 500 }
     );
   }

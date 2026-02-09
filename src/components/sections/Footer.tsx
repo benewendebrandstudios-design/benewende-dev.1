@@ -2,7 +2,23 @@
 
 import React from "react";
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Heart } from "lucide-react";
+import { Github, Linkedin, Twitter, Heart, Facebook, Instagram } from "lucide-react";
+import { useContent } from "@/lib/useContent";
+
+interface SiteSettings {
+  github?: string;
+  linkedin?: string;
+  twitter?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+}
+
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z" />
+  </svg>
+);
 
 const footerLinks = [
   {
@@ -10,14 +26,14 @@ const footerLinks = [
     links: [
       { label: "Services", href: "#services" },
       { label: "Projets", href: "#projets" },
-      { label: "Comp\u00E9tences", href: "#competences" },
+      { label: "Compétences", href: "#competences" },
       { label: "Contact", href: "#contact" },
     ],
   },
   {
     title: "Services",
     links: [
-      { label: "D\u00E9veloppement SaaS", href: "#services" },
+      { label: "Développement SaaS", href: "#services" },
       { label: "Web App", href: "#services" },
       { label: "Solutions IA", href: "#services" },
       { label: "CV Generator", href: "/cv-generator" },
@@ -26,21 +42,36 @@ const footerLinks = [
   {
     title: "Ressources",
     links: [
-      { label: "Blog", href: "#" },
       { label: "Process", href: "#process" },
-      { label: "T\u00E9moignages", href: "#temoignages" },
-      { label: "FAQ", href: "#" },
+      { label: "Témoignages", href: "#temoignages" },
+      { label: "Expérience", href: "#experience" },
+      { label: "Paiement", href: "/payment" },
     ],
   },
 ];
 
-const socials = [
-  { icon: Github, href: "https://github.com/benewende", label: "GitHub" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-];
+const defaultSiteSettings: SiteSettings = {
+  github: "https://github.com/benewende",
+  linkedin: "https://linkedin.com/in/benewende",
+  twitter: "https://x.com/benewende",
+  facebook: "",
+  instagram: "",
+  tiktok: "",
+};
 
 export default function Footer() {
+  const allSettings = useContent<Record<string, SiteSettings>>("settings", {});
+  const site = { ...defaultSiteSettings, ...(allSettings.site || {}) };
+
+  const socials = [
+    { icon: Github, href: site.github, label: "GitHub" },
+    { icon: Linkedin, href: site.linkedin, label: "LinkedIn" },
+    { icon: Twitter, href: site.twitter, label: "X / Twitter" },
+    { icon: Facebook, href: site.facebook, label: "Facebook" },
+    { icon: Instagram, href: site.instagram, label: "Instagram" },
+    { icon: TikTokIcon, href: site.tiktok, label: "TikTok" },
+  ].filter((s) => s.href);
+
   return (
     <footer className="border-t border-border bg-card/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,7 +82,7 @@ export default function Footer() {
               <span className="text-muted-foreground">.dev</span>
             </Link>
             <p className="text-sm text-muted-foreground mt-3 max-w-xs">
-              D\u00E9veloppeur Full Stack & Cr\u00E9ateur de SaaS bas\u00E9 \u00E0 Ouagadougou,
+              Développeur Full Stack & Créateur de SaaS basé à Ouagadougou,
               Burkina Faso.
             </p>
             <div className="flex gap-3 mt-4">

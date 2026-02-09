@@ -11,12 +11,36 @@ import {
   Linkedin,
   Twitter,
   Zap,
+  Phone,
+  MessageCircle,
+  Facebook,
+  Instagram,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import { useContent } from "@/lib/useContent";
+
+interface SiteSettings {
+  email?: string;
+  phone?: string;
+  whatsapp?: string;
+  location?: string;
+  github?: string;
+  linkedin?: string;
+  twitter?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+}
+
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z" />
+  </svg>
+);
 
 const budgetOptions = [
   "< 500 000 FCFA",
@@ -26,7 +50,23 @@ const budgetOptions = [
   "Je ne sais pas encore",
 ];
 
+const defaultSiteSettings: SiteSettings = {
+  email: "benewende.dev@gmail.com",
+  phone: "+226 07 26 71 19",
+  whatsapp: "22607267119",
+  location: "Ouagadougou, Burkina Faso",
+  github: "https://github.com/benewende",
+  linkedin: "https://linkedin.com/in/benewende",
+  twitter: "https://x.com/benewende",
+  facebook: "",
+  instagram: "",
+  tiktok: "",
+};
+
 export default function Contact() {
+  const allSettings = useContent<Record<string, SiteSettings>>("settings", {});
+  const site = { ...defaultSiteSettings, ...(allSettings.site || {}) };
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -51,7 +91,7 @@ export default function Contact() {
       setTimeout(() => setIsSubmitted(false), 5000);
       setFormData({ name: "", email: "", project: "", budget: "", message: "" });
     } catch {
-      alert("Une erreur est survenue. Veuillez r\u00E9essayer.");
+      alert("Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
@@ -231,13 +271,30 @@ export default function Contact() {
                 <div>
                   <div className="font-medium text-sm">Email</div>
                   <a
-                    href="mailto:contact@benewende.dev"
+                    href={`mailto:${site.email}`}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
-                    contact@benewende.dev
+                    {site.email}
                   </a>
                 </div>
               </div>
+
+              {site.phone && (
+                <div className="flex items-start gap-4">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Phone className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-sm">T&eacute;l&eacute;phone</div>
+                    <a
+                      href={`tel:${site.phone}`}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {site.phone}
+                    </a>
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-start gap-4">
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
@@ -246,8 +303,25 @@ export default function Contact() {
                 <div>
                   <div className="font-medium text-sm">Localisation</div>
                   <div className="text-sm text-muted-foreground">
-                    Ouagadougou, Burkina Faso
+                    {site.location}
                   </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="h-10 w-10 rounded-lg bg-green-500/10 flex items-center justify-center shrink-0">
+                  <MessageCircle className="h-5 w-5 text-green-500" />
+                </div>
+                <div>
+                  <div className="font-medium text-sm">WhatsApp</div>
+                  <a
+                    href={`https://wa.me/${site.whatsapp}?text=Bonjour%20Benewende%2C%20je%20souhaite%20discuter%20d%27un%20projet.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-green-500 hover:underline"
+                  >
+                    Envoyer un message
+                  </a>
                 </div>
               </div>
 
@@ -258,7 +332,9 @@ export default function Contact() {
                 <div>
                   <div className="font-medium text-sm">Appel d&eacute;couverte</div>
                   <a
-                    href="#"
+                    href={`https://wa.me/${site.whatsapp}?text=Bonjour%20Benewende%2C%20je%20souhaite%20planifier%20un%20appel%20d%C3%A9couverte%20de%2030min.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-sm text-primary hover:underline"
                   >
                     Planifier 30min gratuites
@@ -269,15 +345,18 @@ export default function Contact() {
 
             <div className="pt-6 border-t border-border">
               <div className="text-sm font-medium mb-3">Suivez-moi</div>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-2">
                 {[
-                  { icon: Github, href: "https://github.com/benewende", label: "GitHub" },
-                  { icon: Linkedin, href: "#", label: "LinkedIn" },
-                  { icon: Twitter, href: "#", label: "Twitter" },
-                ].map((social) => (
+                  { icon: Github, href: site.github, label: "GitHub" },
+                  { icon: Linkedin, href: site.linkedin, label: "LinkedIn" },
+                  { icon: Twitter, href: site.twitter, label: "X / Twitter" },
+                  { icon: Facebook, href: site.facebook, label: "Facebook" },
+                  { icon: Instagram, href: site.instagram, label: "Instagram" },
+                  { icon: TikTokIcon, href: site.tiktok, label: "TikTok" },
+                ].filter((s) => s.href).map((social) => (
                   <a
                     key={social.label}
-                    href={social.href}
+                    href={social.href!}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-lg bg-muted/50 hover:bg-primary/10 flex items-center justify-center transition-colors group"

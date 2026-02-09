@@ -37,7 +37,7 @@ const projectFields: FieldDef[] = [
   { key: "description", label: "Description", type: "textarea", required: true },
   { key: "image", label: "Image URL", type: "text", placeholder: "/projects/..." },
   { key: "status", label: "Statut", type: "select", options: [{ value: "live", label: "Production" }, { value: "in-progress", label: "En cours" }, { value: "prototype", label: "Prototype" }] },
-  { key: "category", label: "Cat\u00e9gorie", type: "select", options: [{ value: "saas", label: "SaaS" }, { value: "webapp", label: "Web App" }, { value: "mobile", label: "Mobile" }, { value: "ia", label: "IA" }, { value: "prototype", label: "Prototype" }] },
+  { key: "category", label: "Catégorie", type: "select", options: [{ value: "saas", label: "SaaS" }, { value: "webapp", label: "Web App" }, { value: "mobile", label: "Mobile" }, { value: "ia", label: "IA" }, { value: "prototype", label: "Prototype" }] },
   { key: "technologies", label: "Technologies", type: "json-array" },
   { key: "progress", label: "Progression (%)", type: "number" },
   { key: "launchDate", label: "Date de lancement", type: "text", placeholder: "Q1 2026" },
@@ -53,7 +53,7 @@ const projectFields: FieldDef[] = [
 const serviceFields: FieldDef[] = [
   { key: "title", label: "Titre", type: "text", required: true },
   { key: "description", label: "Description", type: "textarea", required: true },
-  { key: "icon", label: "Ic\u00f4ne (Lucide)", type: "select", options: [{ value: "Rocket", label: "Rocket" }, { value: "Palette", label: "Palette" }, { value: "Bot", label: "Bot" }, { value: "FileText", label: "FileText" }, { value: "GraduationCap", label: "GraduationCap" }, { value: "Lightbulb", label: "Lightbulb" }, { value: "Code2", label: "Code2" }, { value: "Globe", label: "Globe" }] },
+  { key: "icon", label: "Icône (Lucide)", type: "select", options: [{ value: "Rocket", label: "Rocket" }, { value: "Palette", label: "Palette" }, { value: "Bot", label: "Bot" }, { value: "FileText", label: "FileText" }, { value: "GraduationCap", label: "GraduationCap" }, { value: "Lightbulb", label: "Lightbulb" }, { value: "Code2", label: "Code2" }, { value: "Globe", label: "Globe" }] },
   { key: "priceXOF", label: "Prix XOF", type: "text", required: true },
   { key: "priceEUR", label: "Prix EUR", type: "text", required: true },
   { key: "priceUSD", label: "Prix USD", type: "text", required: true },
@@ -63,17 +63,17 @@ const serviceFields: FieldDef[] = [
 ];
 
 const skillFields: FieldDef[] = [
-  { key: "category", label: "Cat\u00e9gorie", type: "text", required: true },
-  { key: "skills", label: "Comp\u00e9tences", type: "json-skills" },
+  { key: "category", label: "Catégorie", type: "text", required: true },
+  { key: "skills", label: "Compétences", type: "json-skills" },
   { key: "sortOrder", label: "Ordre", type: "number" },
   { key: "visible", label: "Visible", type: "boolean" },
 ];
 
 const testimonialFields: FieldDef[] = [
   { key: "name", label: "Nom", type: "text", required: true },
-  { key: "role", label: "R\u00f4le", type: "text", required: true },
+  { key: "role", label: "Rôle", type: "text", required: true },
   { key: "company", label: "Entreprise", type: "text", required: true },
-  { key: "content", label: "T\u00e9moignage", type: "textarea", required: true },
+  { key: "content", label: "Témoignage", type: "textarea", required: true },
   { key: "rating", label: "Note (1-5)", type: "number" },
   { key: "avatar", label: "Avatar URL", type: "text" },
   { key: "sortOrder", label: "Ordre", type: "number" },
@@ -81,11 +81,11 @@ const testimonialFields: FieldDef[] = [
 ];
 
 const experienceFields: FieldDef[] = [
-  { key: "period", label: "P\u00e9riode", type: "text", required: true, placeholder: "2024 - Pr\u00e9sent" },
+  { key: "period", label: "Période", type: "text", required: true, placeholder: "2024 - Présent" },
   { key: "title", label: "Titre", type: "text", required: true },
   { key: "company", label: "Entreprise", type: "text", required: true },
   { key: "description", label: "Description", type: "textarea", required: true },
-  { key: "achievements", label: "R\u00e9alisations", type: "json-array" },
+  { key: "achievements", label: "Réalisations", type: "json-array" },
   { key: "current", label: "Poste actuel", type: "boolean" },
   { key: "sortOrder", label: "Ordre", type: "number" },
   { key: "visible", label: "Visible", type: "boolean" },
@@ -95,11 +95,11 @@ const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "overview", label: "Vue d'ensemble", icon: TrendingUp },
   { id: "projects", label: "Projets", icon: FolderOpen },
   { id: "services", label: "Services", icon: Briefcase },
-  { id: "skills", label: "Comp\u00e9tences", icon: Code2 },
-  { id: "testimonials", label: "T\u00e9moignages", icon: Star },
-  { id: "experiences", label: "Exp\u00e9rience", icon: Clock },
+  { id: "skills", label: "Compétences", icon: Code2 },
+  { id: "testimonials", label: "Témoignages", icon: Star },
+  { id: "experiences", label: "Expérience", icon: Clock },
   { id: "contacts", label: "Messages", icon: Mail },
-  { id: "settings", label: "Param\u00e8tres", icon: Settings },
+  { id: "settings", label: "Paramètres", icon: Settings },
 ];
 
 export default function AdminDashboard() {
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
       badge: stats.unreadContacts > 0 ? `${stats.unreadContacts} non lu(s)` : undefined,
     },
     {
-      title: "CVs g\u00E9n\u00E9r\u00E9s",
+      title: "CVs générés",
       value: stats.totalCVs,
       icon: FileText,
       color: "text-purple-500",
@@ -367,7 +367,7 @@ export default function AdminDashboard() {
                             </div>
                             <p className="text-xs text-muted-foreground truncate">
                               {contact.email}
-                              {contact.project && ` \u2022 ${contact.project}`}
+                              {contact.project && ` • ${contact.project}`}
                             </p>
                             <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                               {contact.message}
@@ -482,7 +482,7 @@ export default function AdminDashboard() {
                         {contact.project && (
                           <p className="text-xs text-muted-foreground mb-1">
                             <strong>Projet :</strong> {contact.project}
-                            {contact.budget && ` \u2022 Budget : ${contact.budget}`}
+                            {contact.budget && ` • Budget : ${contact.budget}`}
                           </p>
                         )}
                         <p className="text-sm text-foreground/80">
@@ -639,11 +639,15 @@ export default function AdminDashboard() {
                           {[
                             { key: "name", label: "Nom du site" },
                             { key: "email", label: "Email" },
-                            { key: "phone", label: "T\u00e9l\u00e9phone" },
+                            { key: "phone", label: "Téléphone / WhatsApp" },
+                            { key: "whatsapp", label: "Numéro WhatsApp (ex: 22607267119)" },
                             { key: "location", label: "Localisation" },
                             { key: "github", label: "GitHub URL" },
                             { key: "linkedin", label: "LinkedIn URL" },
-                            { key: "twitter", label: "Twitter URL" },
+                            { key: "twitter", label: "Twitter / X URL" },
+                            { key: "facebook", label: "Facebook URL" },
+                            { key: "instagram", label: "Instagram URL" },
+                            { key: "tiktok", label: "TikTok URL" },
                           ].map((f) => (
                             <div key={f.key}>
                               <label className="text-xs font-medium text-muted-foreground mb-1 block">{f.label}</label>
@@ -678,17 +682,21 @@ export default function AdminDashboard() {
                   {(() => {
                     const ai = siteSettings.ai || {};
                     const models = [
-                      { value: "meta-llama/llama-3.1-8b-instruct:free", label: "Llama 3.1 8B (Gratuit)", provider: "Meta", tag: "free" },
-                      { value: "meta-llama/llama-3.3-70b-instruct", label: "Llama 3.3 70B", provider: "Meta", tag: "quality" },
-                      { value: "google/gemini-2.0-flash-001", label: "Gemini 2.0 Flash", provider: "Google", tag: "fast" },
-                      { value: "google/gemini-2.5-pro-preview", label: "Gemini 2.5 Pro", provider: "Google", tag: "premium" },
-                      { value: "anthropic/claude-3.5-sonnet", label: "Claude 3.5 Sonnet", provider: "Anthropic", tag: "premium" },
-                      { value: "anthropic/claude-3.5-haiku", label: "Claude 3.5 Haiku", provider: "Anthropic", tag: "fast" },
-                      { value: "openai/gpt-4o-mini", label: "GPT-4o Mini", provider: "OpenAI", tag: "fast" },
-                      { value: "openai/gpt-4o", label: "GPT-4o", provider: "OpenAI", tag: "premium" },
-                      { value: "deepseek/deepseek-chat-v3-0324", label: "DeepSeek V3", provider: "DeepSeek", tag: "quality" },
-                      { value: "qwen/qwen-2.5-72b-instruct", label: "Qwen 2.5 72B", provider: "Qwen", tag: "quality" },
-                      { value: "mistralai/mistral-small-3.1-24b-instruct", label: "Mistral Small 3.1", provider: "Mistral", tag: "fast" },
+                      { value: "anthropic/claude-sonnet-4", label: "Claude Sonnet 4", provider: "Anthropic", tag: "recommended", desc: "Meilleur pour le français & rédaction pro" },
+                      { value: "anthropic/claude-3.5-sonnet", label: "Claude 3.5 Sonnet", provider: "Anthropic", tag: "premium", desc: "Excellent en rédaction structurée" },
+                      { value: "openai/gpt-4o", label: "GPT-4o", provider: "OpenAI", tag: "premium", desc: "Très polyvalent, bon en français" },
+                      { value: "openai/gpt-4.1", label: "GPT-4.1", provider: "OpenAI", tag: "recommended", desc: "Dernière génération OpenAI" },
+                      { value: "google/gemini-2.5-pro-preview", label: "Gemini 2.5 Pro", provider: "Google", tag: "premium", desc: "Puissant, bon suivi d'instructions" },
+                      { value: "google/gemini-2.5-flash-preview", label: "Gemini 2.5 Flash", provider: "Google", tag: "fast", desc: "Rapide et économique" },
+                      { value: "deepseek/deepseek-r1", label: "DeepSeek R1", provider: "DeepSeek", tag: "quality", desc: "Raisonnement avancé" },
+                      { value: "deepseek/deepseek-chat-v3-0324", label: "DeepSeek V3", provider: "DeepSeek", tag: "quality", desc: "Bon rapport qualité/prix" },
+                      { value: "anthropic/claude-3.5-haiku", label: "Claude 3.5 Haiku", provider: "Anthropic", tag: "fast", desc: "Rapide, bon pour les tâches simples" },
+                      { value: "openai/gpt-4o-mini", label: "GPT-4o Mini", provider: "OpenAI", tag: "fast", desc: "Économique et rapide" },
+                      { value: "meta-llama/llama-3.3-70b-instruct", label: "Llama 3.3 70B", provider: "Meta", tag: "quality", desc: "Open source, bon niveau" },
+                      { value: "mistralai/mistral-large-2411", label: "Mistral Large", provider: "Mistral", tag: "premium", desc: "Excellent en français natif" },
+                      { value: "mistralai/mistral-small-3.1-24b-instruct", label: "Mistral Small 3.1", provider: "Mistral", tag: "fast", desc: "Rapide, bon en français" },
+                      { value: "qwen/qwen-2.5-72b-instruct", label: "Qwen 2.5 72B", provider: "Qwen", tag: "quality", desc: "Multilingue solide" },
+                      { value: "meta-llama/llama-3.1-8b-instruct:free", label: "Llama 3.1 8B (Gratuit)", provider: "Meta", tag: "free", desc: "Gratuit mais qualité limitée" },
                     ];
                     const currentModel = (ai.model as string) || "meta-llama/llama-3.1-8b-instruct:free";
                     const tagColors: Record<string, string> = {
@@ -696,12 +704,22 @@ export default function AdminDashboard() {
                       fast: "bg-blue-500/10 text-blue-600 border-blue-500/20",
                       quality: "bg-amber-500/10 text-amber-600 border-amber-500/20",
                       premium: "bg-purple-500/10 text-purple-600 border-purple-500/20",
+                      recommended: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+                    };
+                    const tagLabels: Record<string, string> = {
+                      free: "Gratuit", fast: "Rapide", quality: "Qualité", premium: "Premium", recommended: "★ Recommandé",
                     };
                     return (
                       <>
                         <p className="text-xs text-muted-foreground">
                           S&eacute;lectionnez le mod&egrave;le utilis&eacute; par l&apos;assistant CV. Les mod&egrave;les premium consomment des cr&eacute;dits OpenRouter.
                         </p>
+                        <div className="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 mb-2">
+                          <p className="text-xs font-medium text-emerald-600 flex items-center gap-1.5">
+                            <Cpu className="h-3.5 w-3.5" />
+                            Conseil : Pour des CV professionnels en fran&ccedil;ais, choisissez Claude Sonnet 4, GPT-4.1 ou Mistral Large.
+                          </p>
+                        </div>
                         <div className="grid gap-2">
                           {models.map((m) => (
                             <button
@@ -718,10 +736,11 @@ export default function AdminDashboard() {
                                 <div>
                                   <span className="text-sm font-medium">{m.label}</span>
                                   <span className="text-[10px] text-muted-foreground ml-2">{m.provider}</span>
+                                  {m.desc && <p className="text-[10px] text-muted-foreground mt-0.5">{m.desc}</p>}
                                 </div>
                               </div>
-                              <Badge variant="outline" className={`text-[10px] ${tagColors[m.tag] || ""}`}>
-                                {m.tag === "free" ? "Gratuit" : m.tag === "fast" ? "Rapide" : m.tag === "quality" ? "Qualit\u00e9" : "Premium"}
+                              <Badge variant="outline" className={`text-[10px] shrink-0 ${tagColors[m.tag] || ""}`}>
+                                {tagLabels[m.tag] || m.tag}
                               </Badge>
                             </button>
                           ))}

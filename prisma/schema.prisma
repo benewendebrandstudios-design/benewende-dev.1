@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,11 +14,15 @@ model User {
   id            String    @id @default(cuid())
   name          String
   email         String    @unique
-  password      String
+  password      String?   // null for OAuth users
   role          String    @default("user") // "admin" | "user"
   image         String?
   cvCredits     Int       @default(1) // free = 1 CV
   plan          String    @default("free") // "free" | "pro" | "business"
+  provider      String?   // "google" | "github" | "credentials"
+  providerId    String?   // OAuth provider user ID
+  resetToken    String?   @unique
+  resetExpires  DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

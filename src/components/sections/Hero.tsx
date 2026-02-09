@@ -6,26 +6,44 @@ import { ArrowDown, FileText, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const typingTexts = [
-  "des SaaS qui r\u00E9solvent de vrais probl\u00E8mes",
+const defaultTypingTexts = [
+  "des SaaS qui résolvent de vrais problèmes",
   "des applications web performantes",
   "des solutions IA innovantes",
-  "des exp\u00E9riences digitales premium",
+  "des expériences digitales premium",
 ];
 
 const stats = [
-  { value: "12+", label: "Projets livr\u00E9s" },
+  { value: "12+", label: "Projets livrés" },
   { value: "50K+", label: "Lignes de code" },
   { value: "95%", label: "Satisfaction clients" },
 ];
+
+interface HeroSettings {
+  title?: string;
+  subtitle?: string;
+  typingTexts?: string[];
+  available?: boolean;
+}
 
 export default function Hero() {
   const [currentText, setCurrentText] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [heroSettings, setHeroSettings] = useState<HeroSettings>({});
 
   useEffect(() => {
-    const text = typingTexts[currentText];
+    fetch("/api/content/settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => { if (data?.hero) setHeroSettings(data.hero); })
+      .catch(() => {});
+  }, []);
+
+  const typingTexts = heroSettings.typingTexts?.length ? heroSettings.typingTexts : defaultTypingTexts;
+  const isAvailable = heroSettings.available !== undefined ? heroSettings.available : true;
+
+  useEffect(() => {
+    const text = typingTexts[currentText % typingTexts.length];
     const timeout = setTimeout(
       () => {
         if (!isDeleting) {
@@ -37,14 +55,14 @@ export default function Hero() {
           setDisplayedText(text.slice(0, displayedText.length - 1));
           if (displayedText.length === 0) {
             setIsDeleting(false);
-            setCurrentText((prev) => (prev + 1) % typingTexts.length);
+            setCurrentText((prev) => (prev + 1) % (typingTexts?.length || 1));
           }
         }
       },
       isDeleting ? 30 : 60
     );
     return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, currentText]);
+  }, [displayedText, isDeleting, currentText, typingTexts]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
@@ -68,7 +86,7 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
             </span>
-            Disponible pour projets
+            {isAvailable ? "Disponible pour projets" : "Actuellement en mission"}
           </motion.div>
         </motion.div>
 
@@ -78,7 +96,7 @@ export default function Hero() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
         >
-          <span className="block text-foreground">Je cr\u00E9e</span>
+          <span className="block text-foreground">Je crée</span>
           <span className="block gradient-text min-h-[1.2em]">
             {displayedText}
             <span className="animate-pulse text-primary">|</span>
@@ -91,7 +109,7 @@ export default function Hero() {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
         >
-          D\u00E9veloppeur Full Stack &bull; Cr\u00E9ateur de SaaS &bull; Expert IA
+          Développeur Full Stack &bull; Créateur de SaaS &bull; Expert IA
           <br />
           <span className="text-sm">Ouagadougou, Burkina Faso</span>
         </motion.p>
@@ -115,7 +133,7 @@ export default function Hero() {
               className="gap-2 text-base px-8"
             >
               <FileText className="h-5 w-5" />
-              G\u00E9n\u00E9rer mon CV
+              Générer mon CV
             </Button>
           </Link>
         </motion.div>

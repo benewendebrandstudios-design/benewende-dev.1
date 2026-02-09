@@ -10,7 +10,7 @@ export async function PATCH(
 ) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) {
-    return NextResponse.json({ error: "Non autoris\u00E9" }, { status: 403 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
   const body = await request.json();
@@ -28,7 +28,7 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) {
-    return NextResponse.json({ error: "Non autoris\u00E9" }, { status: 403 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
   await prisma.contactMessage.delete({ where: { id: params.id } });

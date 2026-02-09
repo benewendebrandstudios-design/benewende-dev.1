@@ -8,7 +8,12 @@ export function useContent<T>(type: string, fallback: T): T {
   useEffect(() => {
     fetch(`/api/content/${type}`)
       .then((res) => (res.ok ? res.json() : null))
-      .then((d) => { if (d) setData(d); })
+      .then((d) => {
+        // Don't replace fallback with empty arrays from DB
+        if (d && !(Array.isArray(d) && d.length === 0)) {
+          setData(d);
+        }
+      })
       .catch(() => {});
   }, [type]);
 
