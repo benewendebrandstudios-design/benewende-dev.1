@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Heart, Facebook, Instagram } from "lucide-react";
+import { Github, Linkedin, Twitter, Heart, Facebook, Instagram, MessageCircle } from "lucide-react";
 import { useContent } from "@/lib/useContent";
 
 interface SiteSettings {
@@ -14,6 +14,13 @@ interface SiteSettings {
   tiktok?: string;
   discord?: string;
   reddit?: string;
+  whatsapp?: string;
+}
+
+interface FooterSettings {
+  copyright?: string;
+  tagline?: string;
+  description?: string;
 }
 
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -60,6 +67,7 @@ const footerLinks = [
       { label: "Témoignages", href: "#temoignages" },
       { label: "Expérience", href: "#experience" },
       { label: "Paiement", href: "/payment" },
+      { label: "Ma Carte", href: "/card" },
     ],
   },
 ];
@@ -74,8 +82,9 @@ const defaultSiteSettings: SiteSettings = {
 };
 
 export default function Footer() {
-  const allSettings = useContent<Record<string, SiteSettings>>("settings", {});
-  const site = { ...defaultSiteSettings, ...(allSettings.site || {}) };
+  const allSettings = useContent<Record<string, unknown>>("settings", {});
+  const site = { ...defaultSiteSettings, ...((allSettings.site as SiteSettings) || {}) };
+  const footer = (allSettings.footer as FooterSettings) || {};
 
   const socials = [
     { icon: Github, href: site.github, label: "GitHub" },
@@ -84,8 +93,9 @@ export default function Footer() {
     { icon: Facebook, href: site.facebook, label: "Facebook" },
     { icon: Instagram, href: site.instagram, label: "Instagram" },
     { icon: TikTokIcon, href: site.tiktok, label: "TikTok" },
-    { icon: DiscordIcon, href: (site as Record<string, string>).discord, label: "Discord" },
-    { icon: RedditIcon, href: (site as Record<string, string>).reddit, label: "Reddit" },
+    { icon: MessageCircle, href: site.whatsapp ? `https://wa.me/${site.whatsapp.replace(/[^0-9]/g, '')}` : undefined, label: "WhatsApp" },
+    { icon: DiscordIcon, href: site.discord, label: "Discord" },
+    { icon: RedditIcon, href: site.reddit, label: "Reddit" },
   ].filter((s) => s.href);
 
   return (
@@ -98,8 +108,7 @@ export default function Footer() {
               <span className="text-muted-foreground">.dev</span>
             </Link>
             <p className="text-sm text-muted-foreground mt-3 max-w-xs">
-              Développeur Full Stack & Créateur de SaaS basé à Ouagadougou,
-              Burkina Faso.
+              {footer.description || "Développeur Full Stack & Créateur de SaaS basé à Ouagadougou, Burkina Faso."}
             </p>
             <div className="flex gap-3 mt-4">
               {socials.map((social) => (
@@ -147,12 +156,10 @@ export default function Footer() {
 
         <div className="border-t border-border py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Benewende.dev. Tous droits
-            r&eacute;serv&eacute;s.
+            &copy; {new Date().getFullYear()} {footer.copyright || "Benewende.dev. Tous droits réservés."}
           </p>
           <p className="text-xs text-muted-foreground flex items-center gap-1">
-            Fait avec <Heart className="h-3 w-3 text-red-500 fill-red-500" />{" "}
-            &agrave; Ouagadougou
+            {footer.tagline ? footer.tagline : (<>Fait avec <Heart className="h-3 w-3 text-red-500 fill-red-500" /> à Ouagadougou</>)}
           </p>
         </div>
       </div>

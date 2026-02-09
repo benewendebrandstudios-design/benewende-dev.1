@@ -999,29 +999,42 @@ export default function AdminDashboard() {
                 <CardContent className="space-y-3">
                   {(() => {
                     const footer = siteSettings.footer || {};
+                    const updateFooter = (key: string, val: string) => setSiteSettings((p) => ({ ...p, footer: { ...p.footer, [key]: val } }));
                     return (
                       <>
+                        <div>
+                          <label className="text-xs font-medium text-muted-foreground mb-1 block">Description (sous le logo)</label>
+                          <textarea
+                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[60px]"
+                            placeholder="Développeur Full Stack & Créateur de SaaS basé à Ouagadougou, Burkina Faso."
+                            value={(footer.description as string) || ""}
+                            onChange={(e) => updateFooter("description", e.target.value)}
+                          />
+                        </div>
                         <div>
                           <label className="text-xs font-medium text-muted-foreground mb-1 block">Copyright</label>
                           <input
                             className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm"
+                            placeholder="Benewende.dev. Tous droits réservés."
                             value={(footer.copyright as string) || ""}
-                            onChange={(e) => setSiteSettings((p) => ({ ...p, footer: { ...p.footer, copyright: e.target.value } }))}
+                            onChange={(e) => updateFooter("copyright", e.target.value)}
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground mb-1 block">Tagline</label>
+                          <label className="text-xs font-medium text-muted-foreground mb-1 block">Tagline (bas de page)</label>
                           <input
                             className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm"
+                            placeholder="Fait avec ❤️ à Ouagadougou"
                             value={(footer.tagline as string) || ""}
-                            onChange={(e) => setSiteSettings((p) => ({ ...p, footer: { ...p.footer, tagline: e.target.value } }))}
+                            onChange={(e) => updateFooter("tagline", e.target.value)}
                           />
                         </div>
+                        <p className="text-[10px] text-muted-foreground">Les réseaux sociaux se gèrent dans « Informations du site » ci-dessus.</p>
                         <div className="flex items-center gap-3">
                           <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("footer", siteSettings.footer || {})}>
                             {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Footer"}
                           </Button>
-                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegard\u00e9 !</span>}
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}
                           {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur de sauvegarde</span>}
                         </div>
                       </>
