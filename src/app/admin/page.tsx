@@ -409,9 +409,9 @@ export default function AdminDashboard() {
                     const items = [
                       { label: "Projets", count: contentData.projects.length, color: "bg-blue-500" },
                       { label: "Services", count: contentData.services.length, color: "bg-green-500" },
-                      { label: "Comp\u00e9tences", count: contentData.skills.length, color: "bg-amber-500" },
-                      { label: "T\u00e9moignages", count: contentData.testimonials.length, color: "bg-purple-500" },
-                      { label: "Exp\u00e9riences", count: contentData.experiences.length, color: "bg-pink-500" },
+                      { label: "Compétences", count: contentData.skills.length, color: "bg-amber-500" },
+                      { label: "Témoignages", count: contentData.testimonials.length, color: "bg-purple-500" },
+                      { label: "Expériences", count: contentData.experiences.length, color: "bg-pink-500" },
                     ];
                     const total = items.reduce((s, i) => s + i.count, 0);
                     return (
