@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, FileText, Rocket } from "lucide-react";
+import { ArrowDown, CreditCard, FileText, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -134,6 +134,16 @@ export default function Hero() {
             >
               <FileText className="h-5 w-5" />
               Générer mon CV
+            </Button>
+          </Link>
+          <Link href="/card">
+            <Button
+              size="lg"
+              variant="outline"
+              className="gap-2 text-base px-8"
+            >
+              <CreditCard className="h-5 w-5" />
+              Ma Carte
             </Button>
           </Link>
         </motion.div>
