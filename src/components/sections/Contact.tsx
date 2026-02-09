@@ -34,6 +34,7 @@ interface SiteSettings {
   facebook?: string;
   instagram?: string;
   tiktok?: string;
+  calendly?: string;
 }
 
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -330,15 +331,26 @@ export default function Contact() {
                   <Calendar className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <div className="font-medium text-sm">Appel d&eacute;couverte</div>
-                  <a
-                    href={`https://wa.me/${site.whatsapp}?text=Bonjour%20Benewende%2C%20je%20souhaite%20planifier%20un%20appel%20d%C3%A9couverte%20de%2030min.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Planifier 30min gratuites
-                  </a>
+                  <div className="font-medium text-sm">Appel découverte</div>
+                  {site.calendly ? (
+                    <a
+                      href={site.calendly}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Réserver un créneau Calendly
+                    </a>
+                  ) : (
+                    <a
+                      href={`https://wa.me/${site.whatsapp}?text=Bonjour%20Benewende%2C%20je%20souhaite%20planifier%20un%20appel%20d%C3%A9couverte%20de%2030min.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Planifier 30min gratuites via WhatsApp
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

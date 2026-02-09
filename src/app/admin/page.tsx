@@ -662,6 +662,7 @@ export default function AdminDashboard() {
                             { key: "facebook", label: "Facebook URL" },
                             { key: "instagram", label: "Instagram URL" },
                             { key: "tiktok", label: "TikTok URL" },
+                            { key: "calendly", label: "Calendly URL (ex: https://calendly.com/benewende)" },
                           ].map((f) => (
                             <div key={f.key}>
                               <label className="text-xs font-medium text-muted-foreground mb-1 block">{f.label}</label>
@@ -676,6 +677,82 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-3">
                           <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("site", siteSettings.site || {})}>
                             {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Infos"}
+                          </Button>
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}
+                          {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur de sauvegarde</span>}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </CardContent>
+              </Card>
+
+              {/* Process / Méthodologie settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Process / Méthodologie</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {(() => {
+                    const process = siteSettings.process || {};
+                    const steps = (process.steps as { icon: string; title: string; duration: string; tasks: string[] }[]) || [
+                      { icon: "Search", title: "Découverte", duration: "1-2 jours", tasks: ["Analyse besoin", "Audit technique", "Proposition solution"] },
+                      { icon: "PenTool", title: "Design & Architecture", duration: "3-5 jours", tasks: ["Wireframes", "Architecture technique", "Validation client"] },
+                      { icon: "Code2", title: "Développement", duration: "2-6 semaines", tasks: ["Sprints hebdomadaires", "Démos régulières", "Feedbacks itératifs"] },
+                      { icon: "Rocket", title: "Déploiement", duration: "1 semaine", tasks: ["Mise en production", "Formation équipe", "Documentation"] },
+                      { icon: "Wrench", title: "Maintenance", duration: "Ongoing", tasks: ["Support technique", "Nouvelles features", "Optimisations"] },
+                    ];
+                    const iconOptions = ["Search", "PenTool", "Code2", "Rocket", "Wrench"];
+                    const updateStep = (idx: number, key: string, val: unknown) => {
+                      const updated = [...steps];
+                      updated[idx] = { ...updated[idx], [key]: val };
+                      setSiteSettings((p) => ({ ...p, process: { ...p.process, steps: updated } }));
+                    };
+                    const addStep = () => {
+                      const updated = [...steps, { icon: "Rocket", title: "", duration: "", tasks: [] }];
+                      setSiteSettings((p) => ({ ...p, process: { ...p.process, steps: updated } }));
+                    };
+                    const removeStep = (idx: number) => {
+                      const updated = steps.filter((_, i) => i !== idx);
+                      setSiteSettings((p) => ({ ...p, process: { ...p.process, steps: updated } }));
+                    };
+                    return (
+                      <>
+                        <p className="text-xs text-muted-foreground mb-2">
+                          Gérez les étapes de votre méthodologie affichées sur le site.
+                        </p>
+                        {steps.map((step, idx) => (
+                          <div key={idx} className="p-3 rounded-lg border bg-muted/20 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-medium text-muted-foreground">Étape {idx + 1}</span>
+                              <Button variant="ghost" size="sm" className="h-6 text-xs text-destructive" onClick={() => removeStep(idx)}>Supprimer</Button>
+                            </div>
+                            <div className="grid sm:grid-cols-3 gap-2">
+                              <div>
+                                <label className="text-[10px] text-muted-foreground">Icône</label>
+                                <select className="w-full h-8 rounded-md border border-input bg-background px-2 text-xs" value={step.icon} onChange={(e) => updateStep(idx, "icon", e.target.value)}>
+                                  {iconOptions.map((ic) => <option key={ic} value={ic}>{ic}</option>)}
+                                </select>
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-muted-foreground">Titre</label>
+                                <input className="w-full h-8 rounded-md border border-input bg-background px-2 text-xs" value={step.title} onChange={(e) => updateStep(idx, "title", e.target.value)} />
+                              </div>
+                              <div>
+                                <label className="text-[10px] text-muted-foreground">Durée</label>
+                                <input className="w-full h-8 rounded-md border border-input bg-background px-2 text-xs" value={step.duration} onChange={(e) => updateStep(idx, "duration", e.target.value)} />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-muted-foreground">Tâches (une par ligne)</label>
+                              <textarea className="w-full rounded-md border border-input bg-background px-2 py-1 text-xs font-mono min-h-[50px]" value={step.tasks.join("\n")} onChange={(e) => updateStep(idx, "tasks", e.target.value.split("\n").filter(Boolean))} />
+                            </div>
+                          </div>
+                        ))}
+                        <Button variant="outline" size="sm" className="text-xs" onClick={addStep}>+ Ajouter une étape</Button>
+                        <div className="flex items-center gap-3">
+                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("process", { steps })}>
+                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Process"}
                           </Button>
                           {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}
                           {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur de sauvegarde</span>}

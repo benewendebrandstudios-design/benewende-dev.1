@@ -8,43 +8,33 @@ import {
   Code2,
   Rocket,
   Wrench,
+  type LucideIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useContent } from "@/lib/useContent";
 
-const steps = [
-  {
-    icon: Search,
-    title: "Découverte",
-    duration: "1-2 jours",
-    tasks: ["Analyse besoin", "Audit technique", "Proposition solution"],
-  },
-  {
-    icon: PenTool,
-    title: "Design & Architecture",
-    duration: "3-5 jours",
-    tasks: ["Wireframes", "Architecture technique", "Validation client"],
-  },
-  {
-    icon: Code2,
-    title: "Développement",
-    duration: "2-6 semaines",
-    tasks: ["Sprints hebdomadaires", "Démos régulières", "Feedbacks itératifs"],
-  },
-  {
-    icon: Rocket,
-    title: "Déploiement",
-    duration: "1 semaine",
-    tasks: ["Mise en production", "Formation équipe", "Documentation"],
-  },
-  {
-    icon: Wrench,
-    title: "Maintenance",
-    duration: "Ongoing",
-    tasks: ["Support technique", "Nouvelles features", "Optimisations"],
-  },
+interface ProcessStep {
+  icon: string;
+  title: string;
+  duration: string;
+  tasks: string[];
+}
+
+const iconMap: Record<string, LucideIcon> = {
+  Search, PenTool, Code2, Rocket, Wrench,
+};
+
+const defaultSteps: ProcessStep[] = [
+  { icon: "Search", title: "Découverte", duration: "1-2 jours", tasks: ["Analyse besoin", "Audit technique", "Proposition solution"] },
+  { icon: "PenTool", title: "Design & Architecture", duration: "3-5 jours", tasks: ["Wireframes", "Architecture technique", "Validation client"] },
+  { icon: "Code2", title: "Développement", duration: "2-6 semaines", tasks: ["Sprints hebdomadaires", "Démos régulières", "Feedbacks itératifs"] },
+  { icon: "Rocket", title: "Déploiement", duration: "1 semaine", tasks: ["Mise en production", "Formation équipe", "Documentation"] },
+  { icon: "Wrench", title: "Maintenance", duration: "Ongoing", tasks: ["Support technique", "Nouvelles features", "Optimisations"] },
 ];
 
 export default function Process() {
+  const allSettings = useContent<Record<string, { steps?: ProcessStep[] }>>("settings", {});
+  const steps = allSettings.process?.steps?.length ? allSettings.process.steps : defaultSteps;
   return (
     <section id="process" className="py-24 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +62,7 @@ export default function Process() {
 
           <div className="space-y-12 md:space-y-0">
             {steps.map((step, i) => {
-              const Icon = step.icon;
+              const Icon = iconMap[step.icon] || Search;
               const isLeft = i % 2 === 0;
 
               return (

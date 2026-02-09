@@ -154,6 +154,62 @@ export async function GET(request: NextRequest) {
       results.experiences = `${existingExperiences} already exist`;
     }
 
+    // 7. Site Settings (upsert each individually)
+    const settingsToSeed: { id: string; value: Record<string, unknown> }[] = [
+      {
+        id: "hero",
+        value: {
+          title: "Je crée",
+          subtitle: "Développeur Full Stack & Créateur de SaaS · Expert IA · Ouagadougou, Burkina Faso",
+          typingTexts: [
+            "des SaaS qui génèrent des revenus",
+            "des apps web ultra-performantes",
+            "des solutions IA sur mesure",
+            "votre vision en produit digital",
+          ],
+          available: true,
+        },
+      },
+      {
+        id: "site",
+        value: {
+          name: "Benewende.dev",
+          email: "benewende.dev@gmail.com",
+          phone: "+226 07 26 71 19",
+          whatsapp: "22607267119",
+          location: "Ouagadougou, Burkina Faso",
+          github: "https://github.com/benewendebrandstudios-design",
+          linkedin: "",
+          twitter: "",
+          facebook: "",
+          instagram: "",
+          tiktok: "",
+          calendly: "",
+        },
+      },
+      {
+        id: "process",
+        value: {
+          steps: [
+            { icon: "Search", title: "Découverte", duration: "1-2 jours", tasks: ["Analyse besoin", "Audit technique", "Proposition solution"] },
+            { icon: "PenTool", title: "Design & Architecture", duration: "3-5 jours", tasks: ["Wireframes", "Architecture technique", "Validation client"] },
+            { icon: "Code2", title: "Développement", duration: "2-6 semaines", tasks: ["Sprints hebdomadaires", "Démos régulières", "Feedbacks itératifs"] },
+            { icon: "Rocket", title: "Déploiement", duration: "1 semaine", tasks: ["Mise en production", "Formation équipe", "Documentation"] },
+            { icon: "Wrench", title: "Maintenance", duration: "Ongoing", tasks: ["Support technique", "Nouvelles features", "Optimisations"] },
+          ],
+        },
+      },
+    ];
+    const seededSettings: string[] = [];
+    for (const s of settingsToSeed) {
+      const existing = await prisma.siteSetting.findUnique({ where: { id: s.id } });
+      if (!existing) {
+        await prisma.siteSetting.create({ data: { id: s.id, value: JSON.stringify(s.value) } });
+        seededSettings.push(s.id);
+      }
+    }
+    results.settings = seededSettings.length > 0 ? `created: ${seededSettings.join(", ")}` : "all exist";
+
     return NextResponse.json({ success: true, results });
   } catch (error) {
     console.error("Seed error:", error);
