@@ -41,6 +41,8 @@ export default function Hero() {
 
   const typingTexts = heroSettings.typingTexts?.length ? heroSettings.typingTexts : defaultTypingTexts;
   const isAvailable = heroSettings.available !== undefined ? heroSettings.available : true;
+  const heroTitle = heroSettings.title || "Je crée";
+  const heroSubtitle = heroSettings.subtitle || "Développeur Full Stack \u00b7 Créateur de SaaS \u00b7 Expert IA";
 
   useEffect(() => {
     const text = typingTexts[currentText % typingTexts.length];
@@ -96,7 +98,7 @@ export default function Hero() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
         >
-          <span className="block text-foreground">Je crée</span>
+          <span className="block text-foreground">{heroTitle}</span>
           <span className="block gradient-text min-h-[1.2em]">
             {displayedText}
             <span className="animate-pulse text-primary">|</span>
@@ -109,9 +111,7 @@ export default function Hero() {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
         >
-          Développeur Full Stack &bull; Créateur de SaaS &bull; Expert IA
-          <br />
-          <span className="text-sm">Ouagadougou, Burkina Faso</span>
+          {heroSubtitle}
         </motion.p>
 
         <motion.div
