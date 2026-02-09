@@ -998,7 +998,12 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {(() => {
-                    const footer = siteSettings.footer || {};
+                    const defaultFooter = {
+                      description: "Développeur Full Stack passionné, spécialisé en React, Next.js et architectures SaaS. Je transforme vos idées en produits digitaux performants, de la conception au déploiement. Basé à Ouagadougou, Burkina Faso.",
+                      copyright: "Benewende.dev. Tous droits réservés.",
+                      tagline: "Fait avec ❤️ à Ouagadougou",
+                    };
+                    const footer = { ...defaultFooter, ...siteSettings.footer };
                     const updateFooter = (key: string, val: string) => setSiteSettings((p) => ({ ...p, footer: { ...p.footer, [key]: val } }));
                     return (
                       <>

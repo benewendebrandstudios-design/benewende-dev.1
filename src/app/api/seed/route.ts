@@ -199,6 +199,14 @@ export async function GET(request: NextRequest) {
           ],
         },
       },
+      {
+        id: "footer",
+        value: {
+          description: "Développeur Full Stack passionné, spécialisé en React, Next.js et architectures SaaS. Je transforme vos idées en produits digitaux performants, de la conception au déploiement. Basé à Ouagadougou, Burkina Faso.",
+          copyright: "Benewende.dev. Tous droits réservés.",
+          tagline: "Fait avec ❤️ à Ouagadougou",
+        },
+      },
     ];
     const seededSettings: string[] = [];
     for (const s of settingsToSeed) {
