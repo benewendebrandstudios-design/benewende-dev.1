@@ -1,0 +1,165 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowDown, FileText, Rocket } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+const typingTexts = [
+  "des SaaS qui r\u00E9solvent de vrais probl\u00E8mes",
+  "des applications web performantes",
+  "des solutions IA innovantes",
+  "des exp\u00E9riences digitales premium",
+];
+
+const stats = [
+  { value: "12+", label: "Projets livr\u00E9s" },
+  { value: "50K+", label: "Lignes de code" },
+  { value: "95%", label: "Satisfaction clients" },
+];
+
+export default function Hero() {
+  const [currentText, setCurrentText] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const text = typingTexts[currentText];
+    const timeout = setTimeout(
+      () => {
+        if (!isDeleting) {
+          setDisplayedText(text.slice(0, displayedText.length + 1));
+          if (displayedText.length === text.length) {
+            setTimeout(() => setIsDeleting(true), 2000);
+          }
+        } else {
+          setDisplayedText(text.slice(0, displayedText.length - 1));
+          if (displayedText.length === 0) {
+            setIsDeleting(false);
+            setCurrentText((prev) => (prev + 1) % typingTexts.length);
+          }
+        }
+      },
+      isDeleting ? 30 : 60
+    );
+    return () => clearTimeout(timeout);
+  }, [displayedText, isDeleting, currentText]);
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/30 bg-green-500/10 text-green-500 text-sm font-medium mb-8"
+          >
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
+            </span>
+            Disponible pour projets
+          </motion.div>
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
+        >
+          <span className="block text-foreground">Je cr\u00E9e</span>
+          <span className="block gradient-text min-h-[1.2em]">
+            {displayedText}
+            <span className="animate-pulse text-primary">|</span>
+          </span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
+        >
+          D\u00E9veloppeur Full Stack &bull; Cr\u00E9ateur de SaaS &bull; Expert IA
+          <br />
+          <span className="text-sm">Ouagadougou, Burkina Faso</span>
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+        >
+          <a href="#projets">
+            <Button size="lg" className="gap-2 text-base px-8">
+              <Rocket className="h-5 w-5" />
+              Voir mes projets
+            </Button>
+          </a>
+          <Link href="/cv-generator">
+            <Button
+              size="lg"
+              variant="outline"
+              className="gap-2 text-base px-8"
+            >
+              <FileText className="h-5 w-5" />
+              G\u00E9n\u00E9rer mon CV
+            </Button>
+          </Link>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.6 }}
+          className="grid grid-cols-3 gap-8 max-w-lg mx-auto"
+        >
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 + i * 0.1 }}
+              className="text-center"
+            >
+              <div className="text-2xl sm:text-3xl font-bold gradient-text">
+                {stat.value}
+              </div>
+              <div className="text-xs sm:text-sm text-muted-foreground mt-1">
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <a href="#services">
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              <ArrowDown className="h-6 w-6 text-muted-foreground" />
+            </motion.div>
+          </a>
+        </motion.div>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          String    @default("user") // "admin" | "user"
+  image         String?
+  cvCredits     Int       @default(1) // free = 1 CV
+  plan          String    @default("free") // "free" | "pro" | "business"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  cvDocuments   CVDocument[]
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  project   String?
+  budget    String?
+  message   String
+  read      Boolean  @default(false)
+  archived  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model CVDocument {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  data       String   // JSON stringified CVData
+  template   String   @default("modern")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  longDescription String?
+  image           String   @default("/projects/placeholder.png")
+  technologies    String   // JSON array
+  status          String   @default("live") // "live" | "in-progress" | "prototype"
+  category        String   @default("webapp") // "saas" | "webapp" | "mobile" | "ia" | "prototype"
+  progress        Int?
+  launchDate      String?
+  liveUrl         String?
+  githubUrl       String?
+  statsUsers      String?
+  statsPerf       String?
+  statsRoi        String?
+  sortOrder       Int      @default(0)
+  visible         Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ServiceItem {
+  id          String   @id @default(cuid())
+  icon        String   @default("Rocket") // lucide icon name
+  title       String
+  description String
+  priceXOF    String
+  priceEUR    String
+  priceUSD    String
+  features    String   // JSON array
+  sortOrder   Int      @default(0)
+  visible     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SkillGroup {
+  id        String   @id @default(cuid())
+  category  String
+  skills    String   // JSON: [{name, level, label}]
+  sortOrder Int      @default(0)
+  visible   Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+model TestimonialItem {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  company   String
+  content   String
+  rating    Int      @default(5)
+  avatar    String?
+  visible   Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model ExperienceItem {
+  id           String   @id @default(cuid())
+  period       String
+  title        String
+  company      String
+  description  String
+  achievements String   // JSON array
+  current      Boolean  @default(false)
+  sortOrder    Int      @default(0)
+  visible      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  userId          String
+  transactionId   String   @unique // CinetPay transaction ID
+  amount          Int      // Amount in XOF
+  currency        String   @default("XOF")
+  description     String
+  paymentMethod   String?  // "MOBILE_MONEY", "CREDIT_CARD", "WALLET"
+  operator        String?  // "ORANGE_CI", "MTN_CI", "MOOV_BF", "ORANGE_BF", "WAVE", etc.
+  status          String   @default("PENDING") // "PENDING" | "ACCEPTED" | "REFUSED" | "CANCELLED"
+  cinetpayData    String?  // JSON - full CinetPay response
+  plan            String?  // "pro" | "business"
+  serviceType     String?  // "cv-generator" | "service"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SiteSetting {
+  id    String @id
+  value String // JSON
+}
