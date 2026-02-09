@@ -277,7 +277,7 @@ export default function AdminDashboard() {
                 onClick={() => signOut({ callbackUrl: "/" })}
               >
                 <LogOut className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">D&eacute;connexion</span>
+                <span className="hidden sm:inline">Déconnexion</span>
               </Button>
             </div>
           </div>
@@ -351,7 +351,7 @@ export default function AdminDashboard() {
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium flex items-center gap-2">
                     <TrendingUp className="h-4 w-4 text-primary" />
-                    Activit&eacute; r&eacute;cente
+                    Activité récente
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -389,7 +389,7 @@ export default function AdminDashboard() {
                             </div>
                           ))}
                         </div>
-                        <p className="text-[10px] text-muted-foreground text-center">Messages re&ccedil;us (7 derni&egrave;res semaines)</p>
+                        <p className="text-[10px] text-muted-foreground text-center">Messages reçus (7 dernières semaines)</p>
                       </div>
                     );
                   })()}
@@ -446,7 +446,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="text-center pt-1 border-t border-border/50">
                           <span className="text-xs text-muted-foreground">Total : </span>
-                          <span className="text-sm font-bold">{total} &eacute;l&eacute;ments</span>
+                          <span className="text-sm font-bold">{total} éléments</span>
                         </div>
                       </div>
                     );
@@ -480,7 +480,7 @@ export default function AdminDashboard() {
             {/* Recent contacts */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Messages r&eacute;cents</CardTitle>
+                <CardTitle className="text-base">Messages récents</CardTitle>
               </CardHeader>
               <CardContent>
                 {contacts.length === 0 ? (
@@ -679,7 +679,7 @@ export default function AdminDashboard() {
         {activeTab === "skills" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <ContentManager
-              title="Comp&eacute;tences"
+              title="Compétences"
               type="skills"
               fields={skillFields}
               items={contentData.skills}
@@ -692,7 +692,7 @@ export default function AdminDashboard() {
         {activeTab === "testimonials" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <ContentManager
-              title="T&eacute;moignages"
+              title="Témoignages"
               type="testimonials"
               fields={testimonialFields}
               items={contentData.testimonials}
@@ -705,7 +705,7 @@ export default function AdminDashboard() {
         {activeTab === "experiences" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <ContentManager
-              title="Exp&eacute;riences"
+              title="Expériences"
               type="experiences"
               fields={experienceFields}
               items={contentData.experiences}
@@ -745,7 +745,7 @@ export default function AdminDashboard() {
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-muted-foreground mb-1 block">Textes d&eacute;filants (un par ligne)</label>
+                          <label className="text-xs font-medium text-muted-foreground mb-1 block">Textes défilants (un par ligne)</label>
                           <textarea
                             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono min-h-[80px]"
                             value={((hero.typingTexts as string[]) || []).join("\n")}
@@ -905,7 +905,7 @@ export default function AdminDashboard() {
                     <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center">
                       <Bot className="h-4 w-4 text-purple-500" />
                     </div>
-                    <CardTitle className="text-base">Mod&egrave;le IA (OpenRouter)</CardTitle>
+                    <CardTitle className="text-base">Modèle IA (OpenRouter)</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -942,12 +942,12 @@ export default function AdminDashboard() {
                     return (
                       <>
                         <p className="text-xs text-muted-foreground">
-                          S&eacute;lectionnez le mod&egrave;le utilis&eacute; par l&apos;assistant CV. Les mod&egrave;les premium consomment des cr&eacute;dits OpenRouter.
+                          Sélectionnez le modèle utilisé par l&apos;assistant CV. Les modèles premium consomment des crédits OpenRouter.
                         </p>
                         <div className="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20 mb-2">
                           <p className="text-xs font-medium text-emerald-600 flex items-center gap-1.5">
                             <Cpu className="h-3.5 w-3.5" />
-                            Conseil : Pour des CV professionnels en fran&ccedil;ais, choisissez Claude Sonnet 4, GPT-4.1 ou Mistral Large.
+                            Conseil : Pour des CV professionnels en français, choisissez Claude Sonnet 4, GPT-4.1 ou Mistral Large.
                           </p>
                         </div>
                         <div className="grid gap-2">
@@ -980,9 +980,9 @@ export default function AdminDashboard() {
                             Actuel : <code className="text-[10px] bg-muted px-1.5 py-0.5 rounded">{currentModel}</code>
                           </div>
                           <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("ai", siteSettings.ai || {})}>
-                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Mod\u00e8le"}
+                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Modèle"}
                           </Button>
-                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegard\u00e9 !</span>}
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}
                           {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur</span>}
                         </div>
                       </>
