@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Rocket, Palette, Bot, FileText, GraduationCap, Lightbulb, Code, Globe, Smartphone, Shield, Zap, Database, LucideIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,17 @@ import { services as staticServices, Service } from "@/data/services";
 import { useContent } from "@/lib/useContent";
 import { useCurrency } from "@/components/currency-provider";
 import Link from "next/link";
+
+const iconMap: Record<string, LucideIcon> = {
+  Rocket, Palette, Bot, FileText, GraduationCap, Lightbulb,
+  Code, Globe, Smartphone, Shield, Zap, Database, ArrowRight, Check,
+};
+
+function resolveIcon(icon: unknown): LucideIcon {
+  if (typeof icon === "string") return iconMap[icon] || Rocket;
+  if (typeof icon === "function") return icon as LucideIcon;
+  return Rocket;
+}
 
 export default function Services() {
   const services = useContent<Service[]>("services", staticServices);
@@ -39,7 +50,7 @@ export default function Services() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => {
-            const Icon = service.icon;
+            const Icon = resolveIcon(service.icon);
             return (
               <motion.div
                 key={service.id}
