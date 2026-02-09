@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getToken } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
-import { isAdmin } from "@/lib/types";
+
+function isAdminToken(token: { role?: string } | null): boolean {
+  return token?.role === "admin";
+}
 
 const modelMap: Record<string, string> = {
   projects: "project",
@@ -24,8 +26,8 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { type: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!isAdmin(session)) {
+  const token = await getToken({ req: _request });
+  if (!isAdminToken(token as { role?: string } | null)) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
@@ -43,8 +45,8 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { type: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!isAdmin(session)) {
+  const token = await getToken({ req: request });
+  if (!isAdminToken(token as { role?: string } | null)) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
@@ -62,8 +64,8 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { type: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!isAdmin(session)) {
+  const token = await getToken({ req: request });
+  if (!isAdminToken(token as { role?: string } | null)) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
@@ -93,8 +95,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { type: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!isAdmin(session)) {
+  const token = await getToken({ req: request });
+  if (!isAdminToken(token as { role?: string } | null)) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 

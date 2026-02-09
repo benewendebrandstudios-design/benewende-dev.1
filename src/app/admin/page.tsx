@@ -1036,7 +1036,7 @@ export default function AdminDashboard() {
                         </div>
                         <p className="text-[10px] text-muted-foreground">Les réseaux sociaux se gèrent dans « Informations du site » ci-dessus.</p>
                         <div className="flex items-center gap-3">
-                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("footer", siteSettings.footer || {})}>
+                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("footer", footer as Record<string, unknown>)}>
                             {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Footer"}
                           </Button>
                           {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}

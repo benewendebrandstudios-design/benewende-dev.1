@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getToken } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
-import { isAdmin } from "@/lib/types";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!isAdmin(session)) {
+  const token = await getToken({ req: request });
+  if ((token as { role?: string } | null)?.role !== "admin") {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
@@ -26,8 +24,8 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
-  if (!isAdmin(session)) {
+  const token = await getToken({ req: _request });
+  if ((token as { role?: string } | null)?.role !== "admin") {
     return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
   }
 
