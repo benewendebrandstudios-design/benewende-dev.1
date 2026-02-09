@@ -161,9 +161,19 @@ export default function AdminDashboard() {
     },
   });
 
+  const [saveStatus, setSaveStatus] = useState<string>("");
   const saveSetting = async (key: string, value: Record<string, unknown>) => {
-    await fetch("/api/admin/content/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: key, value: JSON.stringify(value) }) });
-    await fetchContent("settings");
+    try {
+      setSaveStatus("saving");
+      const res = await fetch("/api/admin/content/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: key, value: JSON.stringify(value) }) });
+      if (!res.ok) throw new Error("Erreur serveur");
+      await fetchContent("settings");
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus(""), 2000);
+    } catch {
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus(""), 3000);
+    }
   };
 
   const markAsRead = async (id: string) => {
@@ -615,9 +625,13 @@ export default function AdminDashboard() {
                             <span className="text-sm">Disponible pour nouveaux projets</span>
                           </label>
                         </div>
-                        <Button size="sm" onClick={() => saveSetting("hero", siteSettings.hero || {})}>
-                          Sauvegarder Hero
-                        </Button>
+                        <div className="flex items-center gap-3">
+                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("hero", siteSettings.hero || {})}>
+                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Hero"}
+                          </Button>
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}
+                          {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur de sauvegarde</span>}
+                        </div>
                       </>
                     );
                   })()}
@@ -659,9 +673,13 @@ export default function AdminDashboard() {
                             </div>
                           ))}
                         </div>
-                        <Button size="sm" onClick={() => saveSetting("site", siteSettings.site || {})}>
-                          Sauvegarder Infos
-                        </Button>
+                        <div className="flex items-center gap-3">
+                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("site", siteSettings.site || {})}>
+                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Infos"}
+                          </Button>
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegardé !</span>}
+                          {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur de sauvegarde</span>}
+                        </div>
                       </>
                     );
                   })()}
@@ -749,9 +767,11 @@ export default function AdminDashboard() {
                           <div className="text-xs text-muted-foreground">
                             Actuel : <code className="text-[10px] bg-muted px-1.5 py-0.5 rounded">{currentModel}</code>
                           </div>
-                          <Button size="sm" onClick={() => saveSetting("ai", siteSettings.ai || {})}>
-                            Sauvegarder Mod&egrave;le
+                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("ai", siteSettings.ai || {})}>
+                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Mod\u00e8le"}
                           </Button>
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegard\u00e9 !</span>}
+                          {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur</span>}
                         </div>
                       </>
                     );
@@ -785,9 +805,13 @@ export default function AdminDashboard() {
                             onChange={(e) => setSiteSettings((p) => ({ ...p, footer: { ...p.footer, tagline: e.target.value } }))}
                           />
                         </div>
-                        <Button size="sm" onClick={() => saveSetting("footer", siteSettings.footer || {})}>
-                          Sauvegarder Footer
-                        </Button>
+                        <div className="flex items-center gap-3">
+                          <Button size="sm" disabled={saveStatus === "saving"} onClick={() => saveSetting("footer", siteSettings.footer || {})}>
+                            {saveStatus === "saving" ? "Sauvegarde..." : "Sauvegarder Footer"}
+                          </Button>
+                          {saveStatus === "saved" && <span className="text-xs text-green-500 font-medium">Sauvegard\u00e9 !</span>}
+                          {saveStatus === "error" && <span className="text-xs text-red-500 font-medium">Erreur de sauvegarde</span>}
+                        </div>
                       </>
                     );
                   })()}

@@ -74,6 +74,17 @@ export async function PUT(
 
   const body = await request.json();
   const { id, ...data } = body;
+
+  // Settings use upsert since the record may not exist yet
+  if (params.type === "settings") {
+    const item = await model.upsert({
+      where: { id },
+      update: data,
+      create: { id, ...data },
+    });
+    return NextResponse.json(item);
+  }
+
   const item = await model.update({ where: { id }, data });
   return NextResponse.json(item);
 }
