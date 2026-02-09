@@ -344,6 +344,139 @@ export default function AdminDashboard() {
               ))}
             </div>
 
+            {/* Charts Row */}
+            <div className="grid md:grid-cols-2 gap-4 mb-8">
+              {/* Activity Chart - Messages par semaine */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                    Activit&eacute; r&eacute;cente
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {(() => {
+                    const now = new Date();
+                    const weeks = Array.from({ length: 7 }, (_, i) => {
+                      const d = new Date(now);
+                      d.setDate(d.getDate() - (6 - i) * 7);
+                      return {
+                        label: `S${Math.ceil((d.getDate()) / 7)}`,
+                        messages: contacts.filter((c) => {
+                          const cd = new Date(c.createdAt);
+                          const weekStart = new Date(d);
+                          weekStart.setDate(weekStart.getDate() - 7);
+                          return cd >= weekStart && cd < d;
+                        }).length,
+                      };
+                    });
+                    const maxVal = Math.max(...weeks.map((w) => w.messages), 1);
+                    return (
+                      <div className="space-y-3">
+                        <div className="flex items-end gap-2 h-32">
+                          {weeks.map((w, i) => (
+                            <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                              <span className="text-[10px] text-muted-foreground font-medium">{w.messages}</span>
+                              <div className="w-full rounded-t-sm bg-primary/10 relative" style={{ height: "100%" }}>
+                                <motion.div
+                                  initial={{ height: 0 }}
+                                  animate={{ height: `${(w.messages / maxVal) * 100}%` }}
+                                  transition={{ delay: i * 0.05, duration: 0.4 }}
+                                  className="absolute bottom-0 w-full rounded-t-sm bg-primary/60"
+                                />
+                              </div>
+                              <span className="text-[9px] text-muted-foreground">{w.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-[10px] text-muted-foreground text-center">Messages re&ccedil;us (7 derni&egrave;res semaines)</p>
+                      </div>
+                    );
+                  })()}
+                </CardContent>
+              </Card>
+
+              {/* Content Distribution */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <Cpu className="h-4 w-4 text-purple-500" />
+                    Contenu du site
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {(() => {
+                    const items = [
+                      { label: "Projets", count: contentData.projects.length, color: "bg-blue-500" },
+                      { label: "Services", count: contentData.services.length, color: "bg-green-500" },
+                      { label: "Comp\u00e9tences", count: contentData.skills.length, color: "bg-amber-500" },
+                      { label: "T\u00e9moignages", count: contentData.testimonials.length, color: "bg-purple-500" },
+                      { label: "Exp\u00e9riences", count: contentData.experiences.length, color: "bg-pink-500" },
+                    ];
+                    const total = items.reduce((s, i) => s + i.count, 0);
+                    return (
+                      <div className="space-y-3">
+                        {/* Horizontal stacked bar */}
+                        <div className="h-6 rounded-full overflow-hidden flex bg-muted/30">
+                          {items.map((item, i) => (
+                            <motion.div
+                              key={item.label}
+                              initial={{ width: 0 }}
+                              animate={{ width: total > 0 ? `${(item.count / total) * 100}%` : "0%" }}
+                              transition={{ delay: i * 0.1, duration: 0.5 }}
+                              className={`${item.color} relative group cursor-default`}
+                            >
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                {item.count > 0 && (
+                                  <span className="text-[9px] text-white font-bold drop-shadow-sm">{item.count}</span>
+                                )}
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                        {/* Legend */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                          {items.map((item) => (
+                            <div key={item.label} className="flex items-center gap-1.5">
+                              <div className={`h-2.5 w-2.5 rounded-full ${item.color}`} />
+                              <span className="text-[11px] text-muted-foreground">{item.label}</span>
+                              <span className="text-[11px] font-semibold ml-auto">{item.count}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="text-center pt-1 border-t border-border/50">
+                          <span className="text-xs text-muted-foreground">Total : </span>
+                          <span className="text-sm font-bold">{total} &eacute;l&eacute;ments</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+              <Card className="bg-gradient-to-br from-primary/5 to-primary/0 border-primary/10">
+                <CardContent className="p-4 text-center">
+                  <div className="text-3xl font-bold text-primary">{contentData.projects.filter((p) => p.status === "live").length}</div>
+                  <div className="text-xs text-muted-foreground mt-1">Projets en production</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gradient-to-br from-green-500/5 to-green-500/0 border-green-500/10">
+                <CardContent className="p-4 text-center">
+                  <div className="text-3xl font-bold text-green-500">{contacts.filter((c) => !c.read).length}</div>
+                  <div className="text-xs text-muted-foreground mt-1">Messages non lus</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gradient-to-br from-purple-500/5 to-purple-500/0 border-purple-500/10">
+                <CardContent className="p-4 text-center">
+                  <div className="text-3xl font-bold text-purple-500">{contentData.services.length}</div>
+                  <div className="text-xs text-muted-foreground mt-1">Services actifs</div>
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Recent contacts */}
             <Card>
               <CardHeader>
@@ -662,6 +795,8 @@ export default function AdminDashboard() {
                             { key: "facebook", label: "Facebook URL" },
                             { key: "instagram", label: "Instagram URL" },
                             { key: "tiktok", label: "TikTok URL" },
+                            { key: "discord", label: "Discord URL" },
+                            { key: "reddit", label: "Reddit URL" },
                             { key: "calendly", label: "Calendly URL (ex: https://calendly.com/benewende)" },
                           ].map((f) => (
                             <div key={f.key}>
