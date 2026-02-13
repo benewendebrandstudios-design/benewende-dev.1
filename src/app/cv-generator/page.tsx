@@ -21,6 +21,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import CVChat from "@/components/cv/CVChat";
+import CVForm from "@/components/cv/CVForm";
 import CVPreview from "@/components/cv/CVPreview";
 import { CVData, defaultCVData, cvTemplates, chatSteps } from "@/lib/cv/templates";
 import { useCurrency } from "@/components/currency-provider";
@@ -31,6 +32,7 @@ export default function CVGeneratorPage() {
   const [isComplete, setIsComplete] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [mode, setMode] = useState<"chat" | "form">("chat");
   const { currency } = useCurrency();
 
   const totalSteps = chatSteps.length - 2;
@@ -325,12 +327,39 @@ export default function CVGeneratorPage() {
               showPreview ? "hidden lg:flex lg:flex-col" : "flex flex-col"
             }`}
           >
-            <CVChat
-              cvData={cvData}
-              onUpdateCV={setCvData}
-              onComplete={() => setIsComplete(true)}
-              onStepChange={setCurrentStep}
-            />
+            {/* Mode toggle */}
+            <div className="flex border-b border-border/50">
+              <button
+                onClick={() => setMode("chat")}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold transition-colors ${
+                  mode === "chat"
+                    ? "text-primary border-b-2 border-primary bg-primary/5"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <MessageSquare className="h-3.5 w-3.5" /> Assistant Chat
+              </button>
+              <button
+                onClick={() => setMode("form")}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold transition-colors ${
+                  mode === "form"
+                    ? "text-primary border-b-2 border-primary bg-primary/5"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <FileText className="h-3.5 w-3.5" /> Formulaire
+              </button>
+            </div>
+            {mode === "chat" ? (
+              <CVChat
+                cvData={cvData}
+                onUpdateCV={setCvData}
+                onComplete={() => setIsComplete(true)}
+                onStepChange={setCurrentStep}
+              />
+            ) : (
+              <CVForm cvData={cvData} onUpdateCV={setCvData} />
+            )}
           </motion.div>
 
           {/* Preview panel */}
