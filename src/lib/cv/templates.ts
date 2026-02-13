@@ -43,35 +43,93 @@ export interface CVData {
   }[];
 }
 
+export type TemplateTier = "free" | "pro" | "premium";
+
 export interface CVTemplate {
   id: string;
   name: string;
   description: string;
-  isPremium: boolean;
-  previewColor: string;
+  tier: TemplateTier;
+  layout: "single" | "sidebar-left" | "sidebar-right" | "two-column" | "header-bold";
+  accentColor: string;
+  previewColors: [string, string];
 }
 
 export const cvTemplates: CVTemplate[] = [
+  // ── Free ──
   {
-    id: "modern",
-    name: "Moderne",
-    description: "Design épuré avec accents colorés",
-    isPremium: false,
-    previewColor: "from-blue-500 to-cyan-500",
+    id: "classic",
+    name: "Classic",
+    description: "Traditionnel, sobre et universel",
+    tier: "free",
+    layout: "single",
+    accentColor: "#1e293b",
+    previewColors: ["#334155", "#64748b"],
   },
   {
-    id: "professional",
-    name: "Professionnel",
-    description: "Classique et élégant pour les entreprises",
-    isPremium: false,
-    previewColor: "from-gray-700 to-gray-900",
+    id: "modern",
+    name: "Modern",
+    description: "Épuré avec accents bleus",
+    tier: "free",
+    layout: "single",
+    accentColor: "#2563eb",
+    previewColors: ["#2563eb", "#06b6d4"],
+  },
+  // ── Pro ──
+  {
+    id: "executive",
+    name: "Executive",
+    description: "Sidebar sombre, allure corporate",
+    tier: "pro",
+    layout: "sidebar-left",
+    accentColor: "#0f172a",
+    previewColors: ["#0f172a", "#1e293b"],
   },
   {
     id: "creative",
     name: "Créatif",
-    description: "Design audacieux pour les profils créatifs",
-    isPremium: true,
-    previewColor: "from-purple-500 to-pink-500",
+    description: "Audacieux pour profils créatifs",
+    tier: "pro",
+    layout: "header-bold",
+    accentColor: "#7c3aed",
+    previewColors: ["#7c3aed", "#ec4899"],
+  },
+  {
+    id: "compact",
+    name: "Compact",
+    description: "Dense et optimisé ATS",
+    tier: "pro",
+    layout: "two-column",
+    accentColor: "#059669",
+    previewColors: ["#059669", "#10b981"],
+  },
+  // ── Premium ──
+  {
+    id: "elegant",
+    name: "Élégant",
+    description: "Sophistiqué, accents dorés, serif",
+    tier: "premium",
+    layout: "single",
+    accentColor: "#92400e",
+    previewColors: ["#92400e", "#d97706"],
+  },
+  {
+    id: "tech",
+    name: "Tech",
+    description: "Dev-focused, barres de skills, dark header",
+    tier: "premium",
+    layout: "sidebar-right",
+    accentColor: "#0ea5e9",
+    previewColors: ["#0c4a6e", "#0ea5e9"],
+  },
+  {
+    id: "impact",
+    name: "Impact",
+    description: "Header plein, typographie bold, maximal",
+    tier: "premium",
+    layout: "header-bold",
+    accentColor: "#dc2626",
+    previewColors: ["#18181b", "#dc2626"],
   },
 ];
 

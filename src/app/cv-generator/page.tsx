@@ -186,54 +186,131 @@ export default function CVGeneratorPage() {
             </Badge>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
-            {cvTemplates.map((tmpl) => (
-              <button
-                key={tmpl.id}
-                onClick={() => setSelectedTemplate(tmpl.id)}
-                className={`group relative shrink-0 rounded-2xl overflow-hidden border-2 transition-all duration-300 ${
-                  selectedTemplate === tmpl.id
-                    ? "border-primary shadow-lg shadow-primary/10 scale-[1.02]"
-                    : "border-border/50 hover:border-primary/30 hover:shadow-md"
-                }`}
-              >
-                <div
-                  className={`w-28 h-36 bg-gradient-to-br ${tmpl.previewColor} flex items-center justify-center p-3`}
+            {cvTemplates.map((tmpl) => {
+              const tierConfig = {
+                free: { label: "Gratuit", color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
+                pro: { label: "Pro", color: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
+                premium: { label: "Premium", color: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+              }[tmpl.tier];
+              const [c1, c2] = tmpl.previewColors;
+              return (
+                <button
+                  key={tmpl.id}
+                  onClick={() => setSelectedTemplate(tmpl.id)}
+                  className={`group relative shrink-0 rounded-2xl overflow-hidden border-2 transition-all duration-300 ${
+                    selectedTemplate === tmpl.id
+                      ? "border-primary shadow-lg shadow-primary/10 scale-[1.02]"
+                      : "border-border/50 hover:border-primary/30 hover:shadow-md"
+                  }`}
                 >
-                  <div className="bg-white/95 rounded-lg p-2 w-full shadow-sm">
-                    <div className="h-1.5 bg-gray-400/60 rounded-full mb-1.5 w-3/4" />
-                    <div className="h-0.5 bg-gray-300/60 rounded-full mb-1 w-full" />
-                    <div className="h-0.5 bg-gray-300/60 rounded-full mb-1.5 w-2/3" />
-                    <div className="space-y-0.5">
-                      <div className="h-0.5 bg-gray-200/60 rounded-full" />
-                      <div className="h-0.5 bg-gray-200/60 rounded-full w-5/6" />
-                      <div className="h-0.5 bg-gray-200/60 rounded-full w-full" />
-                    </div>
+                  {/* Mini preview — distinct layout per template */}
+                  <div className="w-[120px] h-[156px] bg-white relative overflow-hidden">
+                    {tmpl.layout === "sidebar-left" && (
+                      <>
+                        <div className="absolute left-0 top-0 bottom-0 w-[38%]" style={{ backgroundColor: c1 }}>
+                          <div className="mt-4 mx-auto w-5 h-5 rounded-full" style={{ backgroundColor: c2 }} />
+                          <div className="mt-2 mx-2 space-y-1">{[...Array(4)].map((_, i) => <div key={i} className="h-0.5 rounded-full bg-white/30" />)}</div>
+                        </div>
+                        <div className="ml-[42%] mt-3 mr-2 space-y-1.5">
+                          <div className="h-1 rounded-full w-3/4" style={{ backgroundColor: c1 }} />
+                          <div className="h-0.5 bg-gray-200 rounded-full w-full" />
+                          <div className="h-0.5 bg-gray-200 rounded-full w-2/3" />
+                          <div className="mt-2 h-0.5 rounded-full w-1/2" style={{ backgroundColor: c2 + "60" }} />
+                          <div className="h-0.5 bg-gray-100 rounded-full" /><div className="h-0.5 bg-gray-100 rounded-full w-5/6" />
+                        </div>
+                      </>
+                    )}
+                    {tmpl.layout === "sidebar-right" && (
+                      <>
+                        <div className="absolute right-0 top-0 bottom-0 w-[32%]" style={{ backgroundColor: c1 + "15" }}>
+                          <div className="mt-3 mx-2 space-y-1">{[...Array(5)].map((_, i) => <div key={i} className="h-0.5 rounded-full" style={{ backgroundColor: c2 + "40" }} />)}</div>
+                          <div className="mt-2 mx-2 space-y-1">{[...Array(3)].map((_, i) => <div key={i} className="h-1 rounded-full" style={{ backgroundColor: c2 + "30" }} />)}</div>
+                        </div>
+                        <div className="mr-[35%] p-2">
+                          <div className="h-6 rounded mb-2" style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }}>
+                            <div className="h-1 bg-white/60 rounded-full w-2/3 ml-1.5 mt-1.5" />
+                          </div>
+                          <div className="space-y-1"><div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-4/5" /><div className="h-0.5 bg-gray-200 rounded-full w-full" /></div>
+                        </div>
+                      </>
+                    )}
+                    {tmpl.layout === "header-bold" && (
+                      <>
+                        <div className="h-10" style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }}>
+                          <div className="pt-2.5 pl-2.5"><div className="h-1.5 bg-white/80 rounded-full w-2/3" /><div className="h-0.5 bg-white/40 rounded-full w-1/3 mt-1" /></div>
+                        </div>
+                        <div className="p-2 space-y-1.5">
+                          <div className="h-0.5 rounded-full w-1/3" style={{ backgroundColor: c1 + "60" }} />
+                          <div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-5/6" />
+                          <div className="mt-1 h-0.5 rounded-full w-1/3" style={{ backgroundColor: c1 + "60" }} />
+                          <div className="h-0.5 bg-gray-200 rounded-full w-3/4" /><div className="h-0.5 bg-gray-100 rounded-full" />
+                          <div className="flex gap-0.5 mt-1">{[...Array(3)].map((_, i) => <div key={i} className="h-1.5 rounded-full px-1" style={{ backgroundColor: c1 + "20", flex: 1 }} />)}</div>
+                        </div>
+                      </>
+                    )}
+                    {tmpl.layout === "two-column" && (
+                      <div className="p-2">
+                        <div className="text-center mb-1.5"><div className="h-1 mx-auto rounded-full w-2/3" style={{ backgroundColor: c1 }} /><div className="h-0.5 mx-auto mt-0.5 rounded-full w-1/3" style={{ backgroundColor: c2 + "60" }} /></div>
+                        <div className="border-t" style={{ borderColor: c2 + "40" }} />
+                        <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+                          <div className="space-y-1"><div className="h-0.5 rounded-full" style={{ backgroundColor: c2 + "60" }} /><div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-4/5" /><div className="h-0.5 bg-gray-100 rounded-full" /></div>
+                          <div className="space-y-1"><div className="h-0.5 rounded-full" style={{ backgroundColor: c2 + "60" }} /><div className="h-0.5 bg-gray-200 rounded-full w-5/6" /><div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-100 rounded-full w-3/4" /></div>
+                        </div>
+                      </div>
+                    )}
+                    {tmpl.layout === "single" && tmpl.id === "classic" && (
+                      <div className="p-2.5">
+                        <div className="text-center mb-2 pb-1.5" style={{ borderBottom: `1.5px double ${c1}` }}><div className="h-1.5 mx-auto rounded-full w-3/4" style={{ backgroundColor: c1 }} /><div className="h-0.5 mx-auto mt-1 rounded-full w-1/2 bg-gray-300" /></div>
+                        <div className="space-y-1.5">
+                          <div className="h-0.5 rounded-full w-1/3" style={{ backgroundColor: c1, borderBottom: `1px solid ${c1}` }} />
+                          <div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-5/6" />
+                          <div className="h-0.5 rounded-full w-1/3 mt-1" style={{ backgroundColor: c1 }} />
+                          <div className="h-0.5 bg-gray-200 rounded-full w-3/4" /><div className="h-0.5 bg-gray-100 rounded-full" />
+                        </div>
+                      </div>
+                    )}
+                    {tmpl.layout === "single" && tmpl.id === "modern" && (
+                      <div className="p-2.5">
+                        <div className="mb-2"><div className="h-2 rounded-full w-3/4" style={{ backgroundColor: "#111" }} /><div className="h-0.5 mt-1 rounded-full w-1/2" style={{ backgroundColor: c1 }} /><div className="flex gap-1 mt-1.5">{[...Array(3)].map((_, i) => <div key={i} className="h-1 rounded px-1 bg-gray-100" style={{ flex: 1 }} />)}</div></div>
+                        <div className="flex items-center gap-1 mb-1.5"><div className="w-0.5 h-2.5 rounded" style={{ backgroundColor: c1 }} /><div className="h-0.5 rounded-full w-1/3" style={{ backgroundColor: c1 }} /></div>
+                        <div className="space-y-0.5 pl-1.5 border-l border-gray-200"><div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-4/5" /></div>
+                        <div className="flex gap-0.5 mt-2">{[...Array(4)].map((_, i) => <div key={i} className="h-1.5 rounded-full" style={{ backgroundColor: c1 + "20", flex: 1 }} />)}</div>
+                      </div>
+                    )}
+                    {tmpl.layout === "single" && tmpl.id === "elegant" && (
+                      <div className="p-2.5">
+                        <div className="text-center mb-2"><div className="flex items-center justify-center gap-1"><div className="w-4 h-px" style={{ backgroundColor: c1 }} /><div className="h-1.5 rounded-full w-1/2" style={{ backgroundColor: c1 + "30" }} /><div className="w-4 h-px" style={{ backgroundColor: c1 }} /></div><div className="h-0.5 mx-auto mt-1 rounded-full w-1/3" style={{ backgroundColor: c2 + "60" }} /></div>
+                        <div className="flex items-center gap-1 my-1.5"><div className="flex-1 h-px" style={{ backgroundColor: c1 + "30" }} /><div className="w-1 h-1 rotate-45" style={{ backgroundColor: c1 }} /><div className="flex-1 h-px" style={{ backgroundColor: c1 + "30" }} /></div>
+                        <div className="space-y-1 text-center"><div className="h-0.5 mx-auto bg-gray-200 rounded-full w-4/5" /><div className="h-0.5 mx-auto bg-gray-200 rounded-full w-3/5" /><div className="h-0.5 mx-auto bg-gray-100 rounded-full w-full" /></div>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="px-3 py-2.5 bg-card text-center">
-                  <p className="text-xs font-semibold">{tmpl.name}</p>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">{tmpl.description}</p>
-                  {tmpl.isPremium && (
-                    <Badge
-                      variant="secondary"
-                      className="text-[10px] mt-1.5 gap-0.5 bg-amber-500/10 text-amber-600 border-amber-500/20"
-                    >
-                      <Crown className="h-2.5 w-2.5" />
-                      Premium
+                  <div className="px-2.5 py-2 bg-card text-center">
+                    <p className="text-[11px] font-semibold">{tmpl.name}</p>
+                    <p className="text-[9px] text-muted-foreground mt-0.5 leading-tight">{tmpl.description}</p>
+                    <Badge variant="secondary" className={`text-[9px] mt-1.5 gap-0.5 ${tierConfig.color}`}>
+                      {tmpl.tier === "premium" && <Crown className="h-2 w-2" />}
+                      {tmpl.tier === "pro" && <Sparkles className="h-2 w-2" />}
+                      {tierConfig.label}
                     </Badge>
+                  </div>
+                  {selectedTemplate === tmpl.id && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute top-2 right-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center shadow-lg"
+                    >
+                      <Check className="h-3 w-3 text-primary-foreground" />
+                    </motion.div>
                   )}
-                </div>
-                {selectedTemplate === tmpl.id && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary flex items-center justify-center shadow-lg"
-                  >
-                    <Check className="h-3.5 w-3.5 text-primary-foreground" />
-                  </motion.div>
-                )}
-              </button>
-            ))}
+                  {tmpl.tier !== "free" && (
+                    <div className="absolute top-2 left-2 h-4 w-4 rounded-full bg-background/80 backdrop-blur flex items-center justify-center">
+                      <Crown className="h-2.5 w-2.5 text-amber-500" />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </motion.div>
 
