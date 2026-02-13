@@ -50,7 +50,7 @@ export interface CVTemplate {
   name: string;
   description: string;
   tier: TemplateTier;
-  layout: "single" | "sidebar-left" | "sidebar-right" | "two-column" | "header-bold";
+  layout: "single" | "sidebar-left" | "sidebar-right" | "two-column" | "header-bold" | "minimal" | "centered" | "mosaic";
   accentColor: string;
   previewColors: [string, string];
 }
@@ -103,6 +103,33 @@ export const cvTemplates: CVTemplate[] = [
     accentColor: "#059669",
     previewColors: ["#059669", "#10b981"],
   },
+  {
+    id: "minimal",
+    name: "Minimal",
+    description: "Ultra-épuré, typographie raffinée",
+    tier: "pro",
+    layout: "minimal",
+    accentColor: "#6366f1",
+    previewColors: ["#6366f1", "#a5b4fc"],
+  },
+  {
+    id: "berlin",
+    name: "Berlin",
+    description: "Split-header, précision européenne",
+    tier: "pro",
+    layout: "header-bold",
+    accentColor: "#1d4ed8",
+    previewColors: ["#1e3a5f", "#3b82f6"],
+  },
+  {
+    id: "artisan",
+    name: "Artisan",
+    description: "Chaleureux, arrondi et créatif",
+    tier: "pro",
+    layout: "centered",
+    accentColor: "#ea580c",
+    previewColors: ["#ea580c", "#f97316"],
+  },
   // ── Premium ──
   {
     id: "elegant",
@@ -130,6 +157,33 @@ export const cvTemplates: CVTemplate[] = [
     layout: "header-bold",
     accentColor: "#dc2626",
     previewColors: ["#18181b", "#dc2626"],
+  },
+  {
+    id: "luxe",
+    name: "Luxe",
+    description: "Navy & or, prestige corporate",
+    tier: "premium",
+    layout: "sidebar-right",
+    accentColor: "#1e3a5f",
+    previewColors: ["#1e3a5f", "#c9a84c"],
+  },
+  {
+    id: "mosaic",
+    name: "Mosaïque",
+    description: "Cartes modulaires, grille moderne",
+    tier: "premium",
+    layout: "mosaic",
+    accentColor: "#0d9488",
+    previewColors: ["#0d9488", "#2dd4bf"],
+  },
+  {
+    id: "aurora",
+    name: "Aurora",
+    description: "Dégradés lumineux, glassmorphism",
+    tier: "premium",
+    layout: "header-bold",
+    accentColor: "#8b5cf6",
+    previewColors: ["#06b6d4", "#8b5cf6"],
   },
 ];
 

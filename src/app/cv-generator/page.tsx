@@ -286,6 +286,110 @@ export default function CVGeneratorPage() {
                         <div className="space-y-1 text-center"><div className="h-0.5 mx-auto bg-gray-200 rounded-full w-4/5" /><div className="h-0.5 mx-auto bg-gray-200 rounded-full w-3/5" /><div className="h-0.5 mx-auto bg-gray-100 rounded-full w-full" /></div>
                       </div>
                     )}
+                    {/* Minimal — ultra-clean, thin accent */}
+                    {tmpl.layout === "minimal" && (
+                      <div className="p-3">
+                        <div className="mb-2"><div className="h-2 rounded-full w-4/5 bg-gray-800" /><div className="w-5 h-0.5 rounded-full mt-1.5 mb-1" style={{ backgroundColor: c1 }} /><div className="h-0.5 bg-gray-300 rounded-full w-1/2" /></div>
+                        <div className="space-y-2 mt-3">
+                          <div className="h-px w-1/4" style={{ backgroundColor: c1 + "40" }} />
+                          <div className="space-y-0.5"><div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-5/6" /></div>
+                          <div className="h-px w-1/4" style={{ backgroundColor: c1 + "40" }} />
+                          <div className="space-y-0.5"><div className="h-0.5 bg-gray-200 rounded-full w-4/5" /><div className="h-0.5 bg-gray-100 rounded-full" /></div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Berlin — split header with arrow */}
+                    {tmpl.id === "berlin" && (
+                      <div>
+                        <div className="flex h-10">
+                          <div className="flex-1 relative" style={{ backgroundColor: c1 }}>
+                            <div className="pt-2 pl-2"><div className="h-1.5 bg-white/80 rounded-full w-4/5" /><div className="h-0.5 mt-1 rounded-full w-1/2" style={{ backgroundColor: c2 }} /></div>
+                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px]" style={{ borderLeftColor: c2 }} />
+                          </div>
+                          <div className="w-[35%] bg-gray-100 p-1.5 space-y-0.5">{[...Array(3)].map((_, i) => <div key={i} className="h-0.5 rounded-full" style={{ backgroundColor: c1 + "40" }} />)}</div>
+                        </div>
+                        <div className="p-2 space-y-1.5">
+                          <div className="flex items-center gap-1"><div className="w-2.5 h-0.5" style={{ backgroundColor: c2 }} /><div className="h-0.5 rounded-full w-1/4" style={{ backgroundColor: c1 }} /></div>
+                          <div className="flex gap-2 pl-3">
+                            <div className="w-8 space-y-0.5 shrink-0"><div className="h-0.5 rounded-full" style={{ backgroundColor: c2 + "60" }} /><div className="h-0.5 bg-gray-200 rounded-full" /></div>
+                            <div className="w-0.5 rounded shrink-0" style={{ backgroundColor: c2 + "30" }} />
+                            <div className="flex-1 space-y-0.5"><div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-4/5" /></div>
+                          </div>
+                          <div className="flex gap-0.5 mt-1">{[...Array(3)].map((_, i) => <div key={i} className="h-1 rounded-full" style={{ backgroundColor: c2, flex: 1, opacity: 0.15 + i * 0.1 }} />)}</div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Artisan — centered, warm, rounded */}
+                    {tmpl.layout === "centered" && (
+                      <div className="p-2.5">
+                        <div className="text-center mb-2">
+                          <div className="w-6 h-6 rounded-full mx-auto" style={{ backgroundColor: c1 + "15", border: `1.5px solid ${c1}40` }} />
+                          <div className="h-1.5 mx-auto mt-1.5 rounded-full w-3/5" style={{ backgroundColor: c1 + "20" }} />
+                          <div className="flex items-center justify-center gap-1 mt-1"><div className="w-3 h-0.5 rounded-full" style={{ backgroundColor: c1 + "40" }} /><div className="w-1 h-1 rounded-full" style={{ backgroundColor: c1 + "30" }} /><div className="w-3 h-0.5 rounded-full" style={{ backgroundColor: c1 + "40" }} /></div>
+                        </div>
+                        <div className="rounded-lg p-1.5 mb-1.5" style={{ backgroundColor: c1 + "08", border: `1px solid ${c1}15` }}>
+                          <div className="space-y-0.5"><div className="h-0.5 mx-auto bg-gray-200 rounded-full w-4/5" /><div className="h-0.5 mx-auto bg-gray-200 rounded-full w-3/5" /></div>
+                        </div>
+                        <div className="flex flex-wrap justify-center gap-0.5 mt-1">{[...Array(4)].map((_, i) => <div key={i} className="h-1.5 rounded-full px-2" style={{ backgroundColor: c1 + "12", border: `1px solid ${c1}20` }} />)}</div>
+                      </div>
+                    )}
+                    {/* Luxe — left content + navy right sidebar with gold bar */}
+                    {tmpl.id === "luxe" && (
+                      <>
+                        <div className="flex h-full">
+                          <div className="flex-1 p-2">
+                            <div className="h-1.5 rounded-full w-3/4" style={{ backgroundColor: c1 }} />
+                            <div className="w-5 h-0.5 mt-1 mb-2" style={{ background: `linear-gradient(to right, ${c2}, transparent)` }} />
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-1"><div className="w-1 h-1 rotate-45" style={{ backgroundColor: c2 }} /><div className="h-0.5 rounded-full w-1/3" style={{ backgroundColor: c1 }} /></div>
+                              <div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-200 rounded-full w-5/6" />
+                              <div className="h-0.5 bg-gray-100 rounded-full w-3/4" />
+                            </div>
+                          </div>
+                          <div className="w-[30%] shrink-0 relative" style={{ backgroundColor: c1 }}>
+                            <div className="absolute top-0 left-0 right-0 h-0.5" style={{ backgroundColor: c2 }} />
+                            <div className="mt-3 mx-1.5">
+                              <div className="w-4 h-4 rounded-full mx-auto" style={{ border: `1px solid ${c2}60` }} />
+                              <div className="mt-2 space-y-0.5">{[...Array(3)].map((_, i) => <div key={i} className="h-0.5 rounded-full bg-white/20" />)}</div>
+                              <div className="mt-2 space-y-1">{[...Array(2)].map((_, i) => <div key={i} className="h-0.5 rounded-full" style={{ backgroundColor: c2 + "40" }} />)}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {/* Mosaic — card grid */}
+                    {tmpl.layout === "mosaic" && (
+                      <div className="p-1.5" style={{ backgroundColor: "#f9fafb" }}>
+                        <div className="rounded-lg p-2 mb-1" style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }}>
+                          <div className="flex items-center gap-1.5"><div className="w-4 h-4 rounded-full bg-white/20" /><div><div className="h-1 bg-white/80 rounded-full w-12" /><div className="h-0.5 bg-white/40 rounded-full w-8 mt-0.5" /></div></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-1">
+                          {[...Array(4)].map((_, i) => (
+                            <div key={i} className="bg-white rounded p-1 border border-gray-100">
+                              <div className="h-0.5 rounded-full w-2/3 mb-0.5" style={{ backgroundColor: c1 + "40" }} />
+                              <div className="h-0.5 bg-gray-200 rounded-full" /><div className="h-0.5 bg-gray-100 rounded-full w-4/5 mt-0.5" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {/* Aurora — teal→purple gradient header + frosted cards */}
+                    {tmpl.id === "aurora" && (
+                      <div className="h-full" style={{ background: "linear-gradient(135deg, #f0fdfa, #ede9fe, #fdf4ff)" }}>
+                        <div className="rounded-b-xl p-2 mx-0.5 mt-0.5" style={{ background: `linear-gradient(135deg, ${c1}, ${c2})` }}>
+                          <div className="w-4 h-4 rounded-full bg-white/15 mb-1" />
+                          <div className="h-1.5 bg-white/80 rounded-full w-3/4" /><div className="h-0.5 bg-white/40 rounded-full w-1/2 mt-0.5" />
+                        </div>
+                        <div className="p-1.5 space-y-1">
+                          {[...Array(3)].map((_, i) => (
+                            <div key={i} className="rounded-lg p-1.5" style={{ backgroundColor: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.4)" }}>
+                              <div className="h-0.5 rounded-full w-1/3 mb-0.5" style={{ backgroundColor: c2 + "40" }} />
+                              <div className="h-0.5 bg-gray-200 rounded-full w-full" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="px-2.5 py-2 bg-card text-center">
                     <p className="text-[11px] font-semibold">{tmpl.name}</p>
