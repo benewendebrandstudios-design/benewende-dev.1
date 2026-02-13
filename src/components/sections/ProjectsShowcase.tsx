@@ -52,6 +52,167 @@ function isImageUrl(url: string): boolean {
   return false;
 }
 
+function ProjectMedia({ project, className }: { project: Project; className?: string }) {
+  const [imgError, setImgError] = useState(false);
+  const hasVideo = project.demoVideo && /\.(mp4|webm)(\?.*)?$/i.test(project.demoVideo);
+  const hasValidImage = project.image && project.image !== "/projects/placeholder.png" && isImageUrl(project.image) && !imgError;
+
+  if (hasVideo) {
+    return (
+      <video
+        src={project.demoVideo}
+        className={className || "absolute inset-0 w-full h-full object-cover"}
+        muted
+        loop
+        autoPlay
+        playsInline
+      />
+    );
+  }
+
+  if (hasValidImage) {
+    return (
+      <img
+        src={project.image}
+        alt={project.name}
+        className={className || "absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"}
+        onError={() => setImgError(true)}
+      />
+    );
+  }
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <span className="text-4xl font-bold text-primary/20">
+        {project.name.charAt(0)}
+      </span>
+    </div>
+  );
+}
+
+function FeaturedProjectCard({ project, index }: { project: Project; index: number }) {
+  const status = statusConfig[project.status];
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ delay: index * 0.05 }}
+      className="col-span-full"
+    >
+      <Card className="group overflow-hidden hover:glow-sm transition-all duration-300 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
+        <div className="grid md:grid-cols-2">
+          <div className="aspect-video md:aspect-auto md:min-h-[320px] bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 relative overflow-hidden">
+            <ProjectMedia
+              project={project}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute top-3 left-3 flex gap-2">
+              <Badge className="bg-primary text-primary-foreground text-[10px]">
+                ★ Mis en avant
+              </Badge>
+              <Badge variant="outline" className={status.color}>
+                <span className={`h-1.5 w-1.5 rounded-full ${status.dotColor} mr-1.5`} />
+                {status.label}
+              </Badge>
+            </div>
+            {project.launchDate && (
+              <div className="absolute top-3 right-3">
+                <Badge variant="outline" className="bg-background/80 backdrop-blur-sm text-xs">
+                  Lancement {project.launchDate}
+                </Badge>
+              </div>
+            )}
+          </div>
+          <CardContent className="p-6 flex flex-col justify-center">
+            <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+              {project.name}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+              {project.description}
+            </p>
+            {project.longDescription && (
+              <p className="text-xs text-muted-foreground mb-4 line-clamp-3">
+                {project.longDescription}
+              </p>
+            )}
+
+            {project.progress !== undefined && (
+              <div className="mb-4">
+                <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
+                  <span>Progression</span>
+                  <span>{project.progress}%</span>
+                </div>
+                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${project.progress}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                    className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {project.technologies.map((tech) => (
+                <Badge key={tech} variant="secondary" className="text-[10px] font-normal">
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+
+            {project.stats && (
+              <div className="grid grid-cols-3 gap-2 mb-4 pt-3 border-t border-border">
+                {project.stats.users && (
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-primary">{project.stats.users}</div>
+                    <div className="text-[10px] text-muted-foreground">Utilisateurs</div>
+                  </div>
+                )}
+                {project.stats.performance && (
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-secondary">{project.stats.performance}</div>
+                    <div className="text-[10px] text-muted-foreground">Uptime</div>
+                  </div>
+                )}
+                {project.stats.roi && (
+                  <div className="text-center">
+                    <div className="text-sm font-bold text-accent">{project.stats.roi}</div>
+                    <div className="text-[10px] text-muted-foreground">ROI</div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              {project.liveUrl && (
+                <Button size="sm" variant="default" className="gap-1.5 flex-1" asChild>
+                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Voir le projet
+                  </a>
+                </Button>
+              )}
+              {project.githubUrl && (
+                <Button size="sm" variant="outline" className="gap-1.5 flex-1" asChild>
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Github className="h-3.5 w-3.5" />
+                    Code source
+                  </a>
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </div>
+      </Card>
+    </motion.div>
+  );
+}
+
 function ProjectCard({
   project,
   index,
@@ -59,9 +220,11 @@ function ProjectCard({
   project: Project;
   index: number;
 }) {
-  const [imgError, setImgError] = useState(false);
   const status = statusConfig[project.status];
-  const hasValidImage = project.image && project.image !== "/projects/placeholder.png" && isImageUrl(project.image) && !imgError;
+
+  if (project.featured) {
+    return <FeaturedProjectCard project={project} index={index} />;
+  }
 
   return (
     <motion.div
@@ -73,20 +236,10 @@ function ProjectCard({
     >
       <Card className="group h-full overflow-hidden hover:glow-sm transition-all duration-300 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
         <div className="aspect-[4/3] bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 relative overflow-hidden">
-          {hasValidImage ? (
-            <img
-              src={project.image}
-              alt={project.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              onError={() => setImgError(true)}
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-4xl font-bold text-primary/20">
-                {project.name.charAt(0)}
-              </span>
-            </div>
-          )}
+          <ProjectMedia
+            project={project}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
           <div className="absolute top-3 left-3">
             <Badge variant="outline" className={status.color}>
               <span

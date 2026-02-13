@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Pencil, Trash2, Save, X, GripVertical, EyeOff, Upload, ImageIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, Save, X, GripVertical, EyeOff, Upload, ImageIcon, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 export interface FieldDef {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "select" | "json-array" | "boolean" | "json-skills" | "image";
+  type: "text" | "textarea" | "number" | "select" | "json-array" | "boolean" | "json-skills" | "image" | "video";
   options?: { value: string; label: string }[];
   placeholder?: string;
   required?: boolean;
@@ -131,6 +131,120 @@ function ImageUploadField({ field, value, onChange }: { field: FieldDef; value: 
               JPG, PNG, WebP, GIF — max 5 Mo — ratio 16:9 recommandé
             </p>
             <input type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+          </label>
+        )}
+      </div>
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  );
+}
+
+function VideoUploadField({ field, value, onChange }: { field: FieldDef; value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleUpload = async (file: File) => {
+    setError("");
+    if (!file.type.startsWith("video/")) {
+      setError("Ce fichier n'est pas une vidéo (MP4 ou WebM)");
+      return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+      setError("Vidéo trop volumineuse (max 50 Mo)");
+      return;
+    }
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Erreur upload");
+      }
+      const data = await res.json();
+      onChange(data.url);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleUpload(file);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleUpload(file);
+    e.target.value = "";
+  };
+
+  return (
+    <div className="sm:col-span-2">
+      <label className="text-xs font-medium text-muted-foreground mb-1 block">
+        {field.label}
+      </label>
+      <div
+        className={`relative rounded-xl border-2 border-dashed transition-all ${
+          dragOver
+            ? "border-primary bg-primary/5"
+            : value
+            ? "border-border bg-card"
+            : "border-muted-foreground/20 bg-muted/10 hover:border-primary/40"
+        } ${uploading ? "opacity-60 pointer-events-none" : ""}`}
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={handleDrop}
+      >
+        {value ? (
+          <div className="p-3">
+            <div className="relative group">
+              <video
+                src={value}
+                className="w-full max-h-48 rounded-lg object-cover"
+                muted
+                loop
+                autoPlay
+                playsInline
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                <label className="cursor-pointer px-3 py-1.5 bg-white/90 text-black rounded-md text-xs font-medium hover:bg-white transition-colors">
+                  <Upload className="h-3 w-3 inline mr-1" />
+                  Changer
+                  <input type="file" accept="video/mp4,video/webm" className="hidden" onChange={handleFileSelect} />
+                </label>
+                <button
+                  onClick={() => onChange("")}
+                  className="px-3 py-1.5 bg-red-500/90 text-white rounded-md text-xs font-medium hover:bg-red-500 transition-colors"
+                >
+                  <X className="h-3 w-3 inline mr-1" />
+                  Supprimer
+                </button>
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1.5 truncate">{value}</p>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center py-8 cursor-pointer">
+            <div className="h-12 w-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-3">
+              <Video className="h-6 w-6 text-purple-500" />
+            </div>
+            <p className="text-sm font-medium text-foreground">
+              {uploading ? "Upload en cours..." : "Glissez une vidéo ici"}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              ou <span className="text-purple-500 font-medium">cliquez pour parcourir</span>
+            </p>
+            <p className="text-[10px] text-muted-foreground mt-2">
+              MP4, WebM — max 50 Mo — 1280×720 recommandé
+            </p>
+            <input type="file" accept="video/mp4,video/webm" className="hidden" onChange={handleFileSelect} />
           </label>
         )}
       </div>
@@ -278,6 +392,10 @@ export default function ContentManager({
       return <ImageUploadField field={field} value={value as string} onChange={(url) => setData({ ...data, [field.key]: url })} />;
     }
 
+    if (field.type === "video") {
+      return <VideoUploadField field={field} value={value as string} onChange={(url) => setData({ ...data, [field.key]: url })} />;
+    }
+
     if (field.type === "json-skills") {
       let skills: { name: string; level: number; label: string }[] = [];
       try {
@@ -397,7 +515,7 @@ export default function ContentManager({
               <div
                 key={field.key}
                 className={
-                  field.type === "textarea" || field.type === "json-array" || field.type === "json-skills" || field.type === "image"
+                  field.type === "textarea" || field.type === "json-array" || field.type === "json-skills" || field.type === "image" || field.type === "video"
                     ? "sm:col-span-2"
                     : ""
                 }

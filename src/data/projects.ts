@@ -7,6 +7,8 @@ export interface Project {
   description: string;
   longDescription?: string;
   image: string;
+  demoVideo?: string;
+  featured?: boolean;
   technologies: string[];
   status: ProjectStatus;
   category: ProjectCategory;

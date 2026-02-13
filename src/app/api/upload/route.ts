@@ -4,8 +4,11 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
+const VIDEO_TYPES = ["video/mp4", "video/webm"];
+const ALLOWED_TYPES = [...IMAGE_TYPES, ...VIDEO_TYPES];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50MB
 
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request });
@@ -23,14 +26,17 @@ export async function POST(request: NextRequest) {
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "Format non supporté. Utilisez JPG, PNG, WebP, GIF ou SVG." },
+        { error: "Format non supporté. Utilisez JPG, PNG, WebP, GIF, SVG, MP4 ou WebM." },
         { status: 400 }
       );
     }
 
-    if (file.size > MAX_SIZE) {
+    const isVideo = VIDEO_TYPES.includes(file.type);
+    const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+
+    if (file.size > maxSize) {
       return NextResponse.json(
-        { error: "Fichier trop volumineux (max 5 Mo)" },
+        { error: `Fichier trop volumineux (max ${isVideo ? "50" : "5"} Mo)` },
         { status: 400 }
       );
     }

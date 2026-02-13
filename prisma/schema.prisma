@@ -58,6 +58,8 @@ model Project {
   description     String
   longDescription String?
   image           String   @default("/projects/placeholder.png")
+  demoVideo       String?  // URL to demo video (MP4/WebM)
+  featured        Boolean  @default(false)
   technologies    String   // JSON array
   status          String   @default("live") // "live" | "in-progress" | "prototype"
   category        String   @default("webapp") // "saas" | "webapp" | "mobile" | "ia" | "prototype"
