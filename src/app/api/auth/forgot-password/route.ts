@@ -34,13 +34,19 @@ export async function POST(request: NextRequest) {
 
     const resetUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/auth/reset-password?token=${resetToken}`;
 
+    // Log reset URL in development for testing
+    if (process.env.NODE_ENV !== "production") {
+      console.log("🔑 Reset password URL:", resetUrl);
+    }
+
     // Send email via Resend if available
     if (process.env.RESEND_API_KEY) {
       const { Resend } = await import("resend");
       const resend = new Resend(process.env.RESEND_API_KEY);
 
-      await resend.emails.send({
-        from: "Benewende.dev <noreply@benewende.dev>",
+      const fromEmail = process.env.SMTP_FROM || "Benewende.dev <onboarding@resend.dev>";
+      const result = await resend.emails.send({
+        from: fromEmail,
         to: [email],
         subject: "Réinitialisation de votre mot de passe",
         html: `
@@ -67,6 +73,11 @@ export async function POST(request: NextRequest) {
             </div>
           </div>`,
       });
+      if (result.error) {
+        console.error("Resend error:", result.error);
+      } else {
+        console.log("Reset email sent to:", email, "id:", result.data?.id);
+      }
     }
 
     return NextResponse.json({
