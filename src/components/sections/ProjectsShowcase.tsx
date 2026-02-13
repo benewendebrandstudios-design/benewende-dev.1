@@ -72,7 +72,7 @@ function ProjectCard({
       transition={{ delay: index * 0.05 }}
     >
       <Card className="group h-full overflow-hidden hover:glow-sm transition-all duration-300 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
-        <div className="aspect-video bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 relative overflow-hidden">
+        <div className="aspect-[4/3] bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 relative overflow-hidden">
           {hasValidImage ? (
             <img
               src={project.image}
@@ -104,17 +104,17 @@ function ProjectCard({
             </div>
           )}
         </div>
-        <CardContent className="p-5">
-          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+        <CardContent className="p-4">
+          <h3 className="text-base font-semibold mb-1 group-hover:text-primary transition-colors truncate">
             {project.name}
           </h3>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
             {project.description}
           </p>
 
           {project.progress !== undefined && (
-            <div className="mb-4">
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+            <div className="mb-3">
+              <div className="h-1 bg-muted rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   whileInView={{ width: `${project.progress}%` }}
@@ -126,44 +126,49 @@ function ProjectCard({
             </div>
           )}
 
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {project.technologies.map((tech) => (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {project.technologies.slice(0, 4).map((tech) => (
               <Badge
                 key={tech}
                 variant="secondary"
-                className="text-xs font-normal"
+                className="text-[10px] font-normal px-1.5 py-0"
               >
                 {tech}
               </Badge>
             ))}
+            {project.technologies.length > 4 && (
+              <Badge variant="secondary" className="text-[10px] font-normal px-1.5 py-0">
+                +{project.technologies.length - 4}
+              </Badge>
+            )}
           </div>
 
           {project.stats && (
-            <div className="grid grid-cols-3 gap-2 mb-4 pt-3 border-t border-border">
+            <div className="grid grid-cols-3 gap-1 mb-3 pt-2 border-t border-border">
               {project.stats.users && (
                 <div className="text-center">
-                  <div className="text-sm font-semibold text-primary">
+                  <div className="text-xs font-semibold text-primary">
                     {project.stats.users}
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-[10px] text-muted-foreground">
                     Utilisateurs
                   </div>
                 </div>
               )}
               {project.stats.performance && (
                 <div className="text-center">
-                  <div className="text-sm font-semibold text-secondary">
+                  <div className="text-xs font-semibold text-secondary">
                     {project.stats.performance}
                   </div>
-                  <div className="text-xs text-muted-foreground">Uptime</div>
+                  <div className="text-[10px] text-muted-foreground">Uptime</div>
                 </div>
               )}
               {project.stats.roi && (
                 <div className="text-center">
-                  <div className="text-sm font-semibold text-accent">
+                  <div className="text-xs font-semibold text-accent">
                     {project.stats.roi}
                   </div>
-                  <div className="text-xs text-muted-foreground">ROI</div>
+                  <div className="text-[10px] text-muted-foreground">ROI</div>
                 </div>
               )}
             </div>
