@@ -51,6 +51,10 @@ next-env.d.ts
 *.db
 *.db-journal
 
+# uploads (user-uploaded images)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
 # caches
 .eslintcache
 .stylelintcache

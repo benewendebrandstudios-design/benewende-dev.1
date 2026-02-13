@@ -35,7 +35,7 @@ interface Stats { totalUsers: number; totalContacts: number; unreadContacts: num
 const projectFields: FieldDef[] = [
   { key: "name", label: "Nom", type: "text", required: true },
   { key: "description", label: "Description", type: "textarea", required: true },
-  { key: "image", label: "Image URL", type: "text", placeholder: "/projects/..." },
+  { key: "image", label: "Image du projet", type: "image" },
   { key: "status", label: "Statut", type: "select", options: [{ value: "live", label: "Production" }, { value: "in-progress", label: "En cours" }, { value: "prototype", label: "Prototype" }] },
   { key: "category", label: "Catégorie", type: "select", options: [{ value: "saas", label: "SaaS" }, { value: "webapp", label: "Web App" }, { value: "mobile", label: "Mobile" }, { value: "ia", label: "IA" }, { value: "prototype", label: "Prototype" }] },
   { key: "technologies", label: "Technologies", type: "json-array" },
@@ -75,7 +75,7 @@ const testimonialFields: FieldDef[] = [
   { key: "company", label: "Entreprise", type: "text", required: true },
   { key: "content", label: "Témoignage", type: "textarea", required: true },
   { key: "rating", label: "Note (1-5)", type: "number" },
-  { key: "avatar", label: "Avatar URL", type: "text" },
+  { key: "avatar", label: "Photo / Avatar", type: "image" },
   { key: "sortOrder", label: "Ordre", type: "number" },
   { key: "visible", label: "Visible", type: "boolean" },
 ];

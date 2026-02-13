@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Pencil, Trash2, Save, X, GripVertical, EyeOff } from "lucide-react";
+import { Plus, Pencil, Trash2, Save, X, GripVertical, EyeOff, Upload, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 export interface FieldDef {
   key: string;
   label: string;
-  type: "text" | "textarea" | "number" | "select" | "json-array" | "boolean" | "json-skills";
+  type: "text" | "textarea" | "number" | "select" | "json-array" | "boolean" | "json-skills" | "image";
   options?: { value: string; label: string }[];
   placeholder?: string;
   required?: boolean;
@@ -26,6 +26,117 @@ interface ContentManagerProps {
   onDelete: (id: string) => Promise<void>;
   onCreate: (item: Record<string, unknown>) => Promise<void>;
   loading?: boolean;
+}
+
+function ImageUploadField({ field, value, onChange }: { field: FieldDef; value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleUpload = async (file: File) => {
+    setError("");
+    if (!file.type.startsWith("image/")) {
+      setError("Ce fichier n'est pas une image");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image trop volumineuse (max 5 Mo)");
+      return;
+    }
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Erreur upload");
+      }
+      const data = await res.json();
+      onChange(data.url);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleUpload(file);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleUpload(file);
+    e.target.value = "";
+  };
+
+  return (
+    <div className="sm:col-span-2">
+      <label className="text-xs font-medium text-muted-foreground mb-1 block">
+        {field.label}
+      </label>
+      <div
+        className={`relative rounded-xl border-2 border-dashed transition-all ${
+          dragOver
+            ? "border-primary bg-primary/5"
+            : value
+            ? "border-border bg-card"
+            : "border-muted-foreground/20 bg-muted/10 hover:border-primary/40"
+        } ${uploading ? "opacity-60 pointer-events-none" : ""}`}
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={handleDrop}
+      >
+        {value ? (
+          <div className="p-3">
+            <div className="relative group">
+              <img
+                src={value}
+                alt="Preview"
+                className="w-full max-h-48 object-cover rounded-lg"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                <label className="cursor-pointer px-3 py-1.5 bg-white/90 text-black rounded-md text-xs font-medium hover:bg-white transition-colors">
+                  <Upload className="h-3 w-3 inline mr-1" />
+                  Changer
+                  <input type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+                </label>
+                <button
+                  onClick={() => onChange("")}
+                  className="px-3 py-1.5 bg-red-500/90 text-white rounded-md text-xs font-medium hover:bg-red-500 transition-colors"
+                >
+                  <X className="h-3 w-3 inline mr-1" />
+                  Supprimer
+                </button>
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1.5 truncate">{value}</p>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center py-8 cursor-pointer">
+            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
+              <ImageIcon className="h-6 w-6 text-primary" />
+            </div>
+            <p className="text-sm font-medium text-foreground">
+              {uploading ? "Upload en cours..." : "Glissez une image ici"}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              ou <span className="text-primary font-medium">cliquez pour parcourir</span>
+            </p>
+            <p className="text-[10px] text-muted-foreground mt-2">
+              JPG, PNG, WebP, GIF — max 5 Mo — ratio 16:9 recommandé
+            </p>
+            <input type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+          </label>
+        )}
+      </div>
+      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+    </div>
+  );
 }
 
 export default function ContentManager({
@@ -163,6 +274,10 @@ export default function ContentManager({
       );
     }
 
+    if (field.type === "image") {
+      return <ImageUploadField field={field} value={value as string} onChange={(url) => setData({ ...data, [field.key]: url })} />;
+    }
+
     if (field.type === "json-skills") {
       let skills: { name: string; level: number; label: string }[] = [];
       try {
@@ -282,7 +397,7 @@ export default function ContentManager({
               <div
                 key={field.key}
                 className={
-                  field.type === "textarea" || field.type === "json-array" || field.type === "json-skills"
+                  field.type === "textarea" || field.type === "json-array" || field.type === "json-skills" || field.type === "image"
                     ? "sm:col-span-2"
                     : ""
                 }

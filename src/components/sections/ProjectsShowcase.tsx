@@ -63,11 +63,19 @@ function ProjectCard({
     >
       <Card className="group h-full overflow-hidden hover:glow-sm transition-all duration-300 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
         <div className="aspect-video bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 relative overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-4xl font-bold text-primary/20">
-              {project.name.charAt(0)}
-            </span>
-          </div>
+          {project.image && project.image !== "/projects/placeholder.png" ? (
+            <img
+              src={project.image}
+              alt={project.name}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-4xl font-bold text-primary/20">
+                {project.name.charAt(0)}
+              </span>
+            </div>
+          )}
           <div className="absolute top-3 left-3">
             <Badge variant="outline" className={status.color}>
               <span
@@ -205,8 +213,8 @@ export default function ProjectsShowcase() {
             Mes <span className="gradient-text">Projets</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            D&eacute;couvrez mes r&eacute;alisations, des SaaS en production aux prototypes
-            exp&eacute;rimentaux.
+            Découvrez mes réalisations, des SaaS en production aux prototypes
+            expérimentaux.
           </p>
         </motion.div>
 
@@ -246,7 +254,7 @@ export default function ProjectsShowcase() {
                 <div className="mt-6 text-center">
                   <a href="#contact">
                     <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary">
-                      Int&eacute;ress&eacute; par un projet similaire ? Contactez-moi
+                      Intéressé par un projet similaire ? Contactez-moi
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </a>
@@ -268,7 +276,7 @@ export default function ProjectsShowcase() {
                 <div className="mt-6 text-center">
                   <a href="#contact">
                     <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary">
-                      Int&eacute;ress&eacute; par un projet similaire ? Contactez-moi
+                      Intéressé par un projet similaire ? Contactez-moi
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </a>
@@ -280,7 +288,7 @@ export default function ProjectsShowcase() {
               <div>
                 <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
-                  Prototypes & Exp&eacute;rimentations
+                  Prototypes & Expérimentations
                 </h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {prototypeProjects.map((project, i) => (
@@ -290,7 +298,7 @@ export default function ProjectsShowcase() {
                 <div className="mt-6 text-center">
                   <a href="#contact">
                     <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary">
-                      Int&eacute;ress&eacute; par un projet similaire ? Contactez-moi
+                      Intéressé par un projet similaire ? Contactez-moi
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </a>
