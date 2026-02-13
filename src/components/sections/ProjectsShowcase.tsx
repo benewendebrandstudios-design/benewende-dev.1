@@ -44,6 +44,14 @@ const statusConfig: Record<
   },
 };
 
+function isImageUrl(url: string): boolean {
+  if (!url) return false;
+  if (url.startsWith("/uploads/") || url.startsWith("/projects/")) return true;
+  if (/\.(jpg|jpeg|png|gif|webp|svg|avif|bmp)(\?.*)?$/i.test(url)) return true;
+  if (url.includes("imgur") || url.includes("cloudinary") || url.includes("unsplash")) return true;
+  return false;
+}
+
 function ProjectCard({
   project,
   index,
@@ -51,7 +59,9 @@ function ProjectCard({
   project: Project;
   index: number;
 }) {
+  const [imgError, setImgError] = useState(false);
   const status = statusConfig[project.status];
+  const hasValidImage = project.image && project.image !== "/projects/placeholder.png" && isImageUrl(project.image) && !imgError;
 
   return (
     <motion.div
@@ -63,11 +73,12 @@ function ProjectCard({
     >
       <Card className="group h-full overflow-hidden hover:glow-sm transition-all duration-300 hover:border-primary/30 bg-card/50 backdrop-blur-sm">
         <div className="aspect-video bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 relative overflow-hidden">
-          {project.image && project.image !== "/projects/placeholder.png" ? (
+          {hasValidImage ? (
             <img
               src={project.image}
               alt={project.name}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              onError={() => setImgError(true)}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
