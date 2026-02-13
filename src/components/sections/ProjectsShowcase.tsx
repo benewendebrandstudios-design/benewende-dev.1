@@ -66,6 +66,12 @@ function ProjectMedia({ project, className }: { project: Project; className?: st
         loop
         autoPlay
         playsInline
+        onLoadedMetadata={(e) => {
+          const vid = e.currentTarget;
+          if (vid.duration < 10) {
+            vid.playbackRate = Math.max(0.3, vid.duration / 15);
+          }
+        }}
       />
     );
   }
