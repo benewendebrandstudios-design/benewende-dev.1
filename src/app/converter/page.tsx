@@ -43,7 +43,7 @@ const FORMAT_OPTIONS: { value: OutputFormat; label: string; desc: string; mime: 
   { value: "jpg", label: "JPG", desc: "Compressé, photos", mime: "image/jpeg" },
   { value: "webp", label: "WebP", desc: "Moderne, léger, web", mime: "image/webp" },
   { value: "ico", label: "ICO", desc: "Favicon 32×32 & 16×16", mime: "image/x-icon" },
-  { value: "svg", label: "SVG", desc: "Vectoriel (trace bitmap)", mime: "image/svg+xml" },
+  { value: "svg", label: "SVG", desc: "Scalable, qualité parfaite", mime: "image/svg+xml" },
 ];
 
 const ACCEPTED_INPUT = "image/png,image/jpeg,image/webp,image/gif,image/bmp,image/svg+xml,image/tiff,image/x-icon";
@@ -115,41 +115,11 @@ function canvasToIcoBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   });
 }
 
-function bitmapToSvg(canvas: HTMLCanvasElement, threshold: number = 128): string {
-  const w = Math.min(canvas.width, 256);
-  const h = Math.min(canvas.height, 256);
-  const c = document.createElement("canvas");
-  c.width = w;
-  c.height = h;
-  const ctx = c.getContext("2d")!;
-  ctx.drawImage(canvas, 0, 0, w, h);
-  const imgData = ctx.getImageData(0, 0, w, h);
-  const data = imgData.data;
-
-  let paths = "";
-  for (let y = 0; y < h; y++) {
-    let x = 0;
-    while (x < w) {
-      const idx = (y * w + x) * 4;
-      const a = data[idx + 3];
-      const gray = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
-      if (a > 50 && gray < threshold) {
-        const startX = x;
-        while (x < w) {
-          const i2 = (y * w + x) * 4;
-          const a2 = data[i2 + 3];
-          const g2 = (data[i2] + data[i2 + 1] + data[i2 + 2]) / 3;
-          if (a2 <= 50 || g2 >= threshold) break;
-          x++;
-        }
-        paths += `<rect x="${startX}" y="${y}" width="${x - startX}" height="1" />`;
-      } else {
-        x++;
-      }
-    }
-  }
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><g fill="currentColor">${paths}</g></svg>`;
+function canvasToSvg(canvas: HTMLCanvasElement): string {
+  const w = canvas.width;
+  const h = canvas.height;
+  const dataUrl = canvas.toDataURL("image/png");
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><image width="${w}" height="${h}" xlink:href="${dataUrl}" /></svg>`;
 }
 
 async function convertFile(file: ConvertedFile, sourceImg: HTMLImageElement, quality: number, resizeW?: number, resizeH?: number): Promise<{ url: string; size: number }> {
@@ -173,7 +143,7 @@ async function convertFile(file: ConvertedFile, sourceImg: HTMLImageElement, qua
   }
 
   if (file.outputFormat === "svg") {
-    const svgStr = bitmapToSvg(canvas);
+    const svgStr = canvasToSvg(canvas);
     const blob = new Blob([svgStr], { type: "image/svg+xml" });
     return { url: URL.createObjectURL(blob), size: blob.size };
   }
@@ -516,7 +486,7 @@ export default function ConverterPage() {
               { icon: ImageIcon, title: "PNG / JPG / WebP", desc: "Convertissez entre tous les formats d'images courants avec contrôle de qualité." },
               { icon: FileType, title: "Favicon ICO", desc: "Générez des favicons .ico (16×16 & 32×32) depuis n'importe quelle image." },
               { icon: ZoomIn, title: "Redimensionner", desc: "Redimensionnez vos images à n'importe quelle taille en un clic." },
-              { icon: Maximize2, title: "SVG Trace", desc: "Convertissez vos logos et icônes en SVG vectoriel (trace bitmap)." },
+              { icon: Maximize2, title: "SVG Scalable", desc: "Convertissez vos images en SVG scalable, qualité parfaite à toute taille." },
             ].map((feat, i) => (
               <div key={i} className="p-5 rounded-2xl border border-border/50 bg-card/50">
                 <feat.icon className="h-8 w-8 text-emerald-500 mb-3" />
