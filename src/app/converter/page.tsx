@@ -223,6 +223,7 @@ export default function ConverterPage() {
       setFiles([...updated]);
 
       try {
+        const startTime = Date.now();
         const img = new Image();
         img.crossOrigin = "anonymous";
         await new Promise<void>((resolve, reject) => {
@@ -234,6 +235,10 @@ export default function ConverterPage() {
         const rw = resizeEnabled ? resizeW : undefined;
         const rh = resizeEnabled ? resizeH : undefined;
         const result = await convertFile({ ...f, outputFormat }, img, quality, rw, rh);
+
+        const elapsed = Date.now() - startTime;
+        if (elapsed < 800) await new Promise((r) => setTimeout(r, 800 - elapsed));
+
         updated[i] = { ...updated[i], status: "done", outputUrl: result.url, outputSize: result.size, width: img.naturalWidth, height: img.naturalHeight };
       } catch (err) {
         updated[i] = { ...updated[i], status: "error", error: (err as Error).message };
