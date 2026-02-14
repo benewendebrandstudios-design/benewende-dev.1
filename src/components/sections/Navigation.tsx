@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Moon, Sun, Globe, LogIn, User, Shield, LogOut, CreditCard } from "lucide-react";
+import { Menu, X, Moon, Sun, Globe, LogIn, User, Shield, LogOut, CreditCard, FileType } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -83,6 +83,12 @@ export default function Navigation() {
               <Button variant="outline" size="sm" className="gap-1.5">
                 <CreditCard className="h-3.5 w-3.5" />
                 Ma Carte
+              </Button>
+            </Link>
+            <Link href="/converter">
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <FileType className="h-3.5 w-3.5" />
+                Convertisseur
               </Button>
             </Link>
           </div>
@@ -215,6 +221,15 @@ export default function Navigation() {
                 <Button variant="outline" size="sm" className="w-full mt-2 gap-1.5">
                   <CreditCard className="h-3.5 w-3.5" />
                   Ma Carte
+                </Button>
+              </Link>
+              <Link
+                href="/converter"
+                onClick={() => setIsMobileOpen(false)}
+              >
+                <Button variant="outline" size="sm" className="w-full mt-2 gap-1.5">
+                  <FileType className="h-3.5 w-3.5" />
+                  Convertisseur
                 </Button>
               </Link>
               {isLoggedIn ? (

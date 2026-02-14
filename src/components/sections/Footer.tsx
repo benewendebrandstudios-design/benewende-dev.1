@@ -58,6 +58,7 @@ const footerLinks = [
       { label: "Web App", href: "#services" },
       { label: "Solutions IA", href: "#services" },
       { label: "CV Generator", href: "/cv-generator" },
+      { label: "Convertisseur", href: "/converter" },
     ],
   },
   {
